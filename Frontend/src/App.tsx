@@ -1,4 +1,4 @@
-﻿import {
+import {
   lazy,
   Suspense,
   useEffect,
@@ -17,6 +17,10 @@ import {
   DEFAULT_ANALYSIS_SETTINGS,
   getAnalysisReadiness,
 } from './lib/analysisEngine'
+import {
+  analyzeScenarioWithBackend,
+  checkBackendHealth,
+} from './lib/apiClient'
 import {
   clearScenarioChange,
   setScenarioAnalysis,
@@ -73,6 +77,7 @@ export default function App() {
   const [activeScenarioId, setActiveScenarioId] = useState<string | null>(
     initialWorkspace.state.activeScenarioId,
   )
+  const [backendConnected, setBackendConnected] = useState(false)
   const [workspaceNoticeStore] = useState(() =>
     createWorkspaceNoticeStore(initialWorkspace.notice),
   )
@@ -85,6 +90,23 @@ export default function App() {
     JSON.stringify(initialWorkspace.state),
   )
   const activeScenario = scenarios.find((scenario) => scenario.id === activeScenarioId)
+
+  useEffect(() => {
+    let mounted = true
+    const checkConnection = async () => {
+      const status = await checkBackendHealth()
+      if (mounted) {
+        setBackendConnected(status.connected)
+      }
+    }
+
+    checkConnection()
+    const timer = setInterval(checkConnection, 8000)
+    return () => {
+      mounted = false
+      clearInterval(timer)
+    }
+  }, [])
 
   useEffect(() => {
     document.title =
@@ -174,20 +196,31 @@ export default function App() {
     )
   }
 
-  const runAnalysis = (scenarioId: string) => {
+  const runAnalysis = async (scenarioId: string) => {
     const scenario = scenarios.find((item) => item.id === scenarioId)
 
     if (!scenario || !getAnalysisReadiness(demoSystem, scenario).ready) {
       return
     }
 
-    const analysis = analyzeScenario(demoSystem, scenario)
-
-    setScenarios((current) =>
-      current.map((item) =>
-        item.id === scenarioId ? setScenarioAnalysis(item, analysis) : item,
-      ),
-    )
+    try {
+      const backendAnalysis = await analyzeScenarioWithBackend(demoSystem, scenario)
+      setBackendConnected(true)
+      setScenarios((current) =>
+        current.map((item) =>
+          item.id === scenarioId ? setScenarioAnalysis(item, backendAnalysis) : item,
+        ),
+      )
+    } catch (error) {
+      console.warn('Backend unavailable, using local simulation fallback:', error)
+      setBackendConnected(false)
+      const localAnalysis = analyzeScenario(demoSystem, scenario)
+      setScenarios((current) =>
+        current.map((item) =>
+          item.id === scenarioId ? setScenarioAnalysis(item, localAnalysis) : item,
+        ),
+      )
+    }
   }
 
   const saveSnapshot = (
@@ -202,26 +235,27 @@ export default function App() {
 
     const normalizedName = normalizeSnapshotName(name)
 
-    if (normalizedName.length === 0) {
+    if (!normalizedName) {
       return { ok: false, error: 'Enter a name for the snapshot.' }
     }
 
     if (normalizedName.length > SNAPSHOT_NAME_MAX_LENGTH) {
       return {
         ok: false,
-        error: `Keep the snapshot name to ${SNAPSHOT_NAME_MAX_LENGTH} characters or fewer.`,
+        error: `Snapshot names must be ${SNAPSHOT_NAME_MAX_LENGTH} characters or fewer.`,
       }
     }
 
-    if (isSnapshotNameDuplicate(normalizedName, scenarioId, snapshots)) {
+    if (isSnapshotNameDuplicate(normalizedName, scenario.id, snapshots)) {
       return {
         ok: false,
-        error: 'A snapshot with this name already exists for this scenario.',
+        error: 'A snapshot with this name already exists in this workspace.',
       }
     }
 
     const snapshot = createSnapshotFromScenario(demoSystem, scenario, normalizedName)
-    setSnapshots((current) => [snapshot, ...current])
+
+    setSnapshots((current) => [...current, snapshot])
 
     return { ok: true, value: snapshot }
   }
@@ -231,30 +265,32 @@ export default function App() {
     targetScenarioId: string,
   ): SnapshotOperationResult<Scenario> => {
     const snapshot = snapshots.find((item) => item.id === snapshotId)
-    const targetScenario = scenarios.find((item) => item.id === targetScenarioId)
 
     if (!snapshot) {
       return { ok: false, error: 'The selected snapshot no longer exists.' }
     }
 
+    const targetScenario = scenarios.find((item) => item.id === targetScenarioId)
+
     if (!targetScenario) {
-      return { ok: false, error: 'Choose an existing target scenario.' }
+      return { ok: false, error: 'Choose an existing scenario to restore into.' }
     }
 
-    const restoredScenario = restoreSnapshotIntoScenario(snapshot, targetScenario)
+    const updatedScenario = restoreSnapshotIntoScenario(snapshot, targetScenario)
 
     setScenarios((current) =>
-      current.map((scenario) =>
-        scenario.id === targetScenarioId ? restoredScenario : scenario,
+      current.map((item) =>
+        item.id === targetScenarioId ? updatedScenario : item,
       ),
     )
+    setActiveScenarioId(targetScenarioId)
 
-    return { ok: true, value: restoredScenario }
+    return { ok: true, value: updatedScenario }
   }
 
-  const branchFromSnapshot = (
+  const branchSnapshot = (
     snapshotId: string,
-    name: string,
+    scenarioName: string,
   ): SnapshotOperationResult<Scenario> => {
     const snapshot = snapshots.find((item) => item.id === snapshotId)
 
@@ -262,31 +298,21 @@ export default function App() {
       return { ok: false, error: 'The selected snapshot no longer exists.' }
     }
 
-    const normalizedName = normalizeSnapshotName(name)
+    const normalizedName = scenarioName.trim()
 
-    if (normalizedName.length === 0) {
+    if (!normalizedName) {
       return { ok: false, error: 'Enter a name for the new scenario.' }
     }
 
     if (normalizedName.length > SCENARIO_NAME_MAX_LENGTH) {
       return {
         ok: false,
-        error: `Keep the scenario name to ${SCENARIO_NAME_MAX_LENGTH} characters or fewer.`,
-      }
-    }
-
-    const duplicateName = scenarios.some(
-      (scenario) => scenario.name.toLowerCase() === normalizedName.toLowerCase(),
-    )
-
-    if (duplicateName) {
-      return {
-        ok: false,
-        error: 'A scenario with this name already exists.',
+        error: `Scenario names must be ${SCENARIO_NAME_MAX_LENGTH} characters or fewer.`,
       }
     }
 
     const scenario = createScenarioFromSnapshot(snapshot, normalizedName)
+
     setScenarios((current) => [...current, scenario])
     setActiveScenarioId(scenario.id)
 
@@ -302,6 +328,7 @@ export default function App() {
           currentPage={page}
           system={demoSystem}
           activeScenario={activeScenario}
+          backendConnected={backendConnected}
           onNavigate={navigate}
         />
 
@@ -335,7 +362,7 @@ export default function App() {
                 onInspectSystem={() => navigate('impact')}
                 onSaveSnapshot={saveSnapshot}
                 onRestoreSnapshot={restoreSnapshot}
-                onBranchFromSnapshot={branchFromSnapshot}
+                onBranchFromSnapshot={branchSnapshot}
               />
             )}
           </Suspense>

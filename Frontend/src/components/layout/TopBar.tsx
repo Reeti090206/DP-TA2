@@ -1,4 +1,4 @@
-import { ChevronRight, CircleDot, LockKeyhole } from 'lucide-react'
+import { Activity, ChevronRight, CircleDot, Server } from 'lucide-react'
 import { BrandMark } from '../brand/BrandMark'
 import { cn } from '../../lib/cn'
 import { NAV_ITEMS, PAGE_LABELS } from '../../lib/navigation'
@@ -9,10 +9,17 @@ interface TopBarProps {
   currentPage: PageId
   system: DemoSystem
   activeScenario?: Scenario
+  backendConnected?: boolean
   onNavigate: (page: PageId) => void
 }
 
-export function TopBar({ currentPage, system, activeScenario, onNavigate }: TopBarProps) {
+export function TopBar({
+  currentPage,
+  system,
+  activeScenario,
+  backendConnected = false,
+  onNavigate,
+}: TopBarProps) {
   return (
     <header className="sticky top-0 z-30 border-b border-line bg-white/95 backdrop-blur-md">
       <div className="flex h-16 items-center gap-3 px-4 sm:px-6 lg:px-7">
@@ -71,14 +78,29 @@ export function TopBar({ currentPage, system, activeScenario, onNavigate }: TopB
             />
           </button>
 
-          <span
-            title="Workspace state is saved in this browser. Simulation runs locally; no backend is connected."
-            className="inline-flex h-8 shrink-0 items-center gap-1.5 rounded-full border border-brand-line bg-brand-soft px-2.5 text-[8.5px] font-bold uppercase tracking-[0.12em] text-brand-strong"
-          >
-            <LockKeyhole aria-hidden="true" size={11} strokeWidth={2} />
-            <span className="hidden sm:inline">Local demo</span>
-            <span className="sm:hidden">Demo</span>
-          </span>
+          {backendConnected ? (
+            <span
+              title="Connected to RippleWhatIf Java 21 Core Engine (Spring Boot: Builder, Mediator, Strategy, Memento, Template Method active)."
+              className="inline-flex h-8 shrink-0 items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-2.5 text-[8.5px] font-bold uppercase tracking-[0.12em] text-emerald-800 shadow-sm"
+            >
+              <span className="relative flex size-2">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75"></span>
+                <span className="relative inline-flex size-2 rounded-full bg-emerald-500"></span>
+              </span>
+              <Server aria-hidden="true" size={11} className="text-emerald-700" />
+              <span className="hidden sm:inline">Java Engine Live</span>
+              <span className="sm:hidden">Java Live</span>
+            </span>
+          ) : (
+            <span
+              title="Backend not detected on :8080. Running in local browser simulation fallback mode."
+              className="inline-flex h-8 shrink-0 items-center gap-1.5 rounded-full border border-brand-line bg-brand-soft px-2.5 text-[8.5px] font-bold uppercase tracking-[0.12em] text-brand-strong"
+            >
+              <Activity aria-hidden="true" size={11} strokeWidth={2} />
+              <span className="hidden sm:inline">Local Engine</span>
+              <span className="sm:hidden">Local</span>
+            </span>
+          )}
         </div>
       </div>
 
