@@ -14,10 +14,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Objects;
 
-/**
- * Implementation of {@link SystemModelingService}.
- * Can be wired as a Spring bean or instantiated directly as a plain POJO.
- */
 @Service
 public class SystemModelingServiceImpl implements SystemModelingService {
 

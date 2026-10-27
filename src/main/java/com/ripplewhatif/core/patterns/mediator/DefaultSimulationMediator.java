@@ -19,10 +19,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-/**
- * <b>Mediator Pattern Implementation:</b> Coordinates change simulation between system components,
- * graph strategies, risk scoring models, snapshots, and workflow execution.
- */
 public class DefaultSimulationMediator implements SimulationMediator {
 
     private ImpactPropagationStrategy propagationStrategy;
@@ -55,10 +51,8 @@ public class DefaultSimulationMediator implements SimulationMediator {
         Objects.requireNonNull(request, "ChangeRequest cannot be null");
         Objects.requireNonNull(context, "SimulationContext cannot be null");
 
-        // Execute workflow via Template Method Pattern
         SimulationResult result = workflow.executeWorkflow(model, request, context);
 
-        // Store result in mediator registry
         history.put(result.getScenarioId(), result);
         return result;
     }

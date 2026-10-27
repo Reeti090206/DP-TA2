@@ -10,12 +10,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-/**
- * <b>Memento Pattern:</b> Stores an immutable snapshot of a {@link com.ripplewhatif.core.domain.model.SystemModel}'s internal state.
- *
- * <p>Encapsulates the state of all components (deep copies) and dependency relations
- * at a specific instant, ensuring baseline state cannot be corrupted by simulations.
- */
 public final class SystemMemento {
 
     private final String snapshotId;
@@ -32,7 +26,6 @@ public final class SystemMemento {
         this.description = description != null ? description : "System state snapshot";
         this.timestamp = Instant.now();
 
-        // Deep copy of all components to guarantee snapshot immutability
         Map<String, Component> deepCopiedMap = new HashMap<>();
         for (Map.Entry<String, Component> entry : liveComponents.entrySet()) {
             deepCopiedMap.put(entry.getKey(), entry.getValue().deepCopy());
@@ -53,9 +46,6 @@ public final class SystemMemento {
         return timestamp;
     }
 
-    /**
-     * Returns a deep copy of the saved components so that consumers cannot tamper with memento internal state.
-     */
     public Map<String, Component> getComponentsState() {
         Map<String, Component> copy = new HashMap<>();
         for (Map.Entry<String, Component> entry : componentsSnapshot.entrySet()) {

@@ -5,9 +5,6 @@ import com.ripplewhatif.core.patterns.strategy.ImpactPropagationStrategy;
 import com.ripplewhatif.core.patterns.strategy.RiskScoringStrategy;
 import com.ripplewhatif.core.patterns.strategy.WeightedRiskScoringStrategy;
 
-/**
- * Context configuration options supplied to the simulation mediator.
- */
 public class SimulationContext {
 
     private final ImpactPropagationStrategy propagationStrategy;

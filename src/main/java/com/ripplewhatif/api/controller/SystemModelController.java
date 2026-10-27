@@ -18,11 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
 
-/**
- * <b>MVC Controller:</b> REST controller managing architectural system model components and dependencies.
- *
- * <p>Contains NO graph traversal or risk math; strictly delegates to {@link SystemModelingService}.
- */
 @RestController
 @RequestMapping("/api/v1/model")
 public class SystemModelController {

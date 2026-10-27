@@ -17,19 +17,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 
-/**
- * <b>Strategy Implementation:</b> Breadth-First Search (BFS) based propagation strategy.
- *
- * <p>Explores the dependency graph level-by-level, identifying ripple effects on direct callers
- * first before traversing to higher-level upstream components.
- *
- * <p>Guarantees:
- * <ul>
- *   <li>Cycle-safe: Path-based cycle detection terminates recursive loops.</li>
- *   <li>Configurable threshold: Stops propagation when attenuated impact drops below threshold.</li>
- *   <li>Multi-path support: Aggregates worst-case impact and tracks all propagation paths without duplicate entries.</li>
- * </ul>
- */
 public class BreadthFirstImpactStrategy implements ImpactPropagationStrategy {
 
     @Override
@@ -54,7 +41,6 @@ public class BreadthFirstImpactStrategy implements ImpactPropagationStrategy {
         Component targetComponent = workingModel.getComponent(targetId);
         Component baselineTarget = baselineModel.getComponent(targetId);
 
-        // 1. Calculate direct impact on target
         ComponentProperties directProjected = MetricProjector.projectDirectChange(targetComponent, request);
         double directImpactScore = MetricProjector.calculateDirectImpactScore(targetComponent, request);
         targetComponent.setProperties(directProjected);
@@ -80,7 +66,6 @@ public class BreadthFirstImpactStrategy implements ImpactPropagationStrategy {
         );
         impactRecordMap.put(targetId, directRecord);
 
-        // 2. BFS Queue initialization
         Queue<TraversalNode> queue = new ArrayDeque<>();
         queue.add(new TraversalNode(targetId, 0, directImpactScore, rootPath, directProjected));
 
@@ -89,7 +74,6 @@ public class BreadthFirstImpactStrategy implements ImpactPropagationStrategy {
         while (!queue.isEmpty()) {
             TraversalNode current = queue.poll();
 
-            // Find relevant edges based on propagation direction
             List<Dependency> candidateEdges = propagatesUpstream
                     ? workingModel.getDirectCallersOf(current.componentId())
                     : workingModel.getDirectCalleesOf(current.componentId());
@@ -99,7 +83,6 @@ public class BreadthFirstImpactStrategy implements ImpactPropagationStrategy {
                         ? edge.getSourceComponentId()
                         : edge.getTargetComponentId();
 
-                // Cycle prevention: stop traversal if nextId is already in current path
                 if (current.path().contains(nextId)) {
                     continue;
                 }
@@ -107,17 +90,14 @@ public class BreadthFirstImpactStrategy implements ImpactPropagationStrategy {
                 Component nextComp = workingModel.getComponent(nextId);
                 Component nextBaseline = baselineModel.getComponent(nextId);
 
-                // Calculate attenuated impact score
                 double edgeWeight = edge.getEdgeTransmissionWeight();
                 double criticalityFactor = nextComp.getCriticality().getRiskMultiplier() / 1.5;
                 double nextImpactScore = current.currentImpactScore() * edgeWeight * criticalityFactor;
 
-                // Threshold check: ignore negligible ripple
                 if (nextImpactScore < threshold) {
                     continue;
                 }
 
-                // Project metrics for this indirect component
                 ComponentProperties indirectProjected = MetricProjector.projectIndirectChange(
                         nextComp,
                         edge,
@@ -145,7 +125,7 @@ public class BreadthFirstImpactStrategy implements ImpactPropagationStrategy {
                     impactRecordMap.put(nextId, record);
                     nextComp.setProperties(indirectProjected);
                 } else {
-                    // Node reached via alternative path: update to worst-case impact
+
                     ImpactRecord existing = impactRecordMap.get(nextId);
                     if (nextImpactScore > existing.getImpactScore()) {
                         ImpactRecord updated = new ImpactRecord(
@@ -163,7 +143,6 @@ public class BreadthFirstImpactStrategy implements ImpactPropagationStrategy {
                     }
                 }
 
-                // Continue BFS into next depth
                 queue.add(new TraversalNode(nextId, current.depth() + 1, nextImpactScore, extendedPath, indirectProjected));
             }
         }

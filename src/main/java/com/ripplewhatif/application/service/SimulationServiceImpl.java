@@ -27,10 +27,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-/**
- * Implementation of {@link SimulationService}.
- * Delegates coordination to {@link SimulationMediator} and preserves clean boundaries.
- */
 @Service
 public class SimulationServiceImpl implements SimulationService {
 

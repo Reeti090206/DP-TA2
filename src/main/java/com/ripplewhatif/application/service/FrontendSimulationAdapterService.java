@@ -29,10 +29,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-/**
- * Service adapting Java Core Simulation Engine results to the exact JSON contract
- * expected by the React/TypeScript frontend (ScenarioAnalysis).
- */
 @Service
 public class FrontendSimulationAdapterService {
 
@@ -98,7 +94,6 @@ public class FrontendSimulationAdapterService {
             ));
         }
 
-        // Configure Strategies based on frontend analysisSettings
         String propSetting = request.analysisSettings() != null ? request.analysisSettings().propagationStrategy() : "breadth-first";
         ImpactPropagationStrategy propagationStrategy = "weighted".equalsIgnoreCase(propSetting)
                 ? new DepthFirstImpactStrategy()
@@ -109,11 +104,9 @@ public class FrontendSimulationAdapterService {
 
         DefaultSimulationMediator mediator = new DefaultSimulationMediator(propagationStrategy, scoringStrategy);
 
-        // Run simulation on primary changed component
         ChangeRequest primaryChange = coreChangeRequests.get(0);
         SimulationResult simResult = mediator.simulate(model, primaryChange, context);
 
-        // Build findings
         List<FrontendAnalysisFindingDto> findings = new ArrayList<>();
         List<String> affectedIds = new ArrayList<>(simResult.getImpactRecords().keySet());
         List<String> criticalAffected = new ArrayList<>();

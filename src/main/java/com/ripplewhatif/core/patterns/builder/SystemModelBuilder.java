@@ -15,17 +15,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
-/**
- * <b>Builder Pattern:</b> Assembles, validates, and constructs a {@link SystemModel}.
- *
- * <p>Enforces graph integrity checks:
- * <ul>
- *   <li>Detection and rejection of duplicate component IDs.</li>
- *   <li>Validation that all dependency sources and targets point to existing components.</li>
- *   <li>Rejection of self-dependencies.</li>
- *   <li>Detection of duplicate dependency relations.</li>
- * </ul>
- */
 public class SystemModelBuilder {
 
     private String systemId = "sys-default";
@@ -72,25 +61,17 @@ public class SystemModelBuilder {
         return addDependency(new Dependency(sourceComponentId, targetComponentId, strength, type, type.isBlocking(), ""));
     }
 
-    /**
-     * Validates graph constraints before instantiation.
-     *
-     * @throws ModelValidationException if any structural constraint is violated
-     */
     public void validate() {
         List<String> errors = new ArrayList<>();
 
-        // 1. Report duplicate component attempts
         if (!duplicateComponentAttempts.isEmpty()) {
             errors.addAll(duplicateComponentAttempts);
         }
 
-        // 2. Must have at least one component
         if (components.isEmpty()) {
             errors.add("System model must contain at least one component");
         }
 
-        // 3. Verify dependency endpoints exist in registered components
         for (Dependency dep : dependencies) {
             String src = dep.getSourceComponentId();
             String tgt = dep.getTargetComponentId();
@@ -111,9 +92,6 @@ public class SystemModelBuilder {
         }
     }
 
-    /**
-     * Builds and returns the validated {@link SystemModel}.
-     */
     public SystemModel build() {
         validate();
 

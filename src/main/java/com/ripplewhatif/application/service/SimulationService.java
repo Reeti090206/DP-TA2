@@ -7,9 +7,6 @@ import com.ripplewhatif.application.dto.SimulationResultDto;
 
 import java.util.List;
 
-/**
- * Application service orchestrating what-if scenarios, risk analyses, and comparisons.
- */
 public interface SimulationService {
 
     SimulationResultDto runSimulation(ChangeRequestDto requestDto);

@@ -13,40 +13,27 @@ import com.ripplewhatif.core.patterns.strategy.ImpactPropagationStrategy;
 import java.time.Instant;
 import java.util.UUID;
 
-/**
- * <b>Template Method Pattern:</b> Defines the invariant skeleton of the simulation workflow
- * while delegating specific algorithmic steps and hook points to subclasses and strategy collaborators.
- */
 public abstract class AbstractSimulationWorkflow {
 
-    /**
-     * The template method defining the immutable algorithmic sequence.
-     */
     public final SimulationResult executeWorkflow(SystemModel baselineModel,
                                                   ChangeRequest request,
                                                   SimulationContext context) {
         long startTime = System.currentTimeMillis();
 
-        // 1. Validation step
         validate(baselineModel, request);
 
-        // 2. Memento snapshot of baseline
         SystemMemento baselineMemento = captureBaselineSnapshot(baselineModel);
 
-        // 3. Isolated working state instantiation
         SystemModel workingModel = createWorkingCopy(baselineModel);
 
-        // 4. Execution of propagation strategy
         ImpactPropagationStrategy.PropagationResult propResult =
                 executePropagation(workingModel, baselineModel, request, context);
 
-        // 5. Execution of risk calculation strategy
         double riskScore = calculateRisk(workingModel, request, propResult, context);
 
         long duration = System.currentTimeMillis() - startTime;
         String scenarioId = "scn-" + UUID.randomUUID().toString().substring(0, 8);
 
-        // 6. Report assembly
         SimulationResult result = assembleResult(
                 scenarioId,
                 request,
@@ -57,10 +44,8 @@ public abstract class AbstractSimulationWorkflow {
                 !context.isCommitChangeAfterSimulation()
         );
 
-        // 7. Cleanup or conditional commit
         finalizeState(baselineModel, workingModel, baselineMemento, context);
 
-        // 8. Completion hook
         onSimulationCompleted(result);
 
         return result;
@@ -135,18 +120,15 @@ public abstract class AbstractSimulationWorkflow {
                                  SystemMemento baselineMemento,
                                  SimulationContext context) {
         if (context.isCommitChangeAfterSimulation()) {
-            // Explicit user commit: copy working model state into baseline
+
             baselineModel.restore(workingModel.createMemento("COMMITTED", "Simulated state committed"));
         } else {
-            // Restore snapshot to ensure strict baseline isolation
+
             baselineModel.restore(baselineMemento);
         }
     }
 
-    /**
-     * Hook method invoked upon simulation completion. Subclasses can override.
-     */
     protected void onSimulationCompleted(SimulationResult result) {
-        // Default no-op hook
+
     }
 }

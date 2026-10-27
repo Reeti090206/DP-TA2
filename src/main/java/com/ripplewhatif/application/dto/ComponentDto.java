@@ -2,9 +2,6 @@ package com.ripplewhatif.application.dto;
 
 import com.ripplewhatif.core.domain.model.ComponentCriticality;
 
-/**
- * Data Transfer Object representing an architectural component.
- */
 public record ComponentDto(
         String id,
         String name,

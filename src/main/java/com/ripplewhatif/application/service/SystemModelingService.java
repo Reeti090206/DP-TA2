@@ -5,9 +5,6 @@ import com.ripplewhatif.application.dto.DependencyDto;
 import com.ripplewhatif.application.dto.SystemModelDto;
 import com.ripplewhatif.core.domain.model.SystemModel;
 
-/**
- * Application service managing system model configuration and persistence state.
- */
 public interface SystemModelingService {
 
     SystemModelDto getSystemModel();

@@ -5,19 +5,16 @@ import com.ripplewhatif.core.domain.model.ComponentProperties;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * Detailed impact profile for a single component affected by a simulation scenario.
- */
 public class ImpactRecord {
 
     private final String componentId;
     private final boolean directlyAffected;
     private final int propagationDepth;
-    private final double impactScore;       // 0.0 to 100.0
+    private final double impactScore;
     private final ImpactSeverity severity;
     private final ComponentProperties baselineProperties;
     private final ComponentProperties projectedProperties;
-    private final List<String> propagationPath; // e.g. ["payment", "checkout", "web-gateway"]
+    private final List<String> propagationPath;
 
     public ImpactRecord(String componentId,
                         boolean directlyAffected,

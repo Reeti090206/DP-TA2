@@ -13,9 +13,6 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Maps simulation and domain exceptions to standard HTTP error responses.
- */
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 

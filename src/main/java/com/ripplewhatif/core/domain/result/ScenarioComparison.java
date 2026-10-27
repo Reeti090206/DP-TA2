@@ -4,9 +4,6 @@ import java.time.Instant;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * Value object presenting comparative diff between baseline and a simulated scenario.
- */
 public class ScenarioComparison {
 
     private final String scenarioId;

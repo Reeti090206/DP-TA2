@@ -21,8 +21,7 @@ class ImpactPropagationStrategyTest {
 
     @BeforeEach
     void setUp() {
-        // Architecture: Gateway -> Checkout -> Payment
-        //               Checkout -> Inventory
+
         baselineModel = new SystemModelBuilder()
                 .addComponent(new Component("gateway", "API Gateway"))
                 .addComponent(new Component("checkout", "Checkout Service"))
@@ -53,7 +52,6 @@ class ImpactPropagationStrategyTest {
         assertThat(result.indirectlyAffected()).containsExactlyInAnyOrder("checkout", "gateway");
         assertThat(result.indirectlyAffected()).doesNotContain("inventory");
 
-        // Verify propagation path
         assertThat(result.impactPaths()).anyMatch(path ->
                 path.equals(List.of("payment", "checkout", "gateway")));
     }
@@ -81,7 +79,7 @@ class ImpactPropagationStrategyTest {
     @Test
     @DisplayName("Should prevent infinite loops and terminate gracefully when graph has dependency cycles")
     void shouldHandleDependencyCyclesWithoutInfiniteLoop() {
-        // Cyclic architecture: A -> B -> C -> A
+
         SystemModel cyclicModel = new SystemModelBuilder()
                 .addComponent(new Component("comp-a", "Component A"))
                 .addComponent(new Component("comp-b", "Component B"))
@@ -99,14 +97,14 @@ class ImpactPropagationStrategyTest {
 
         assertThat(result.directlyAffected()).containsExactly("comp-c");
         assertThat(result.indirectlyAffected()).contains("comp-b", "comp-a");
-        // Ensure no infinite loop occurred and records size is exactly 3
+
         assertThat(result.impactRecords()).hasSize(3);
     }
 
     @Test
     @DisplayName("Should handle multiple paths reaching the same component without duplicate counting")
     void shouldHandleMultiplePathsReachingSameComponent() {
-        // Diamond graph: Gateway depends on ServiceA and ServiceB; both ServiceA and ServiceB depend on CoreDB
+
         SystemModel diamondModel = new SystemModelBuilder()
                 .addComponent(new Component("coredb", "Core Database"))
                 .addComponent(new Component("service-a", "Service A"))
@@ -125,11 +123,10 @@ class ImpactPropagationStrategyTest {
                 diamondModel.deepCopy(), diamondModel, request, 5.0);
 
         assertThat(result.directlyAffected()).containsExactly("coredb");
-        // Gateway should be in indirectlyAffected once
+
         long gatewayCount = result.indirectlyAffected().stream().filter(id -> id.equals("gateway")).count();
         assertThat(gatewayCount).isEqualTo(1);
 
-        // Multiple impact paths to gateway should be recorded
         List<List<String>> pathsToGateway = result.impactPaths().stream()
                 .filter(p -> p.get(p.size() - 1).equals("gateway"))
                 .toList();
@@ -142,7 +139,6 @@ class ImpactPropagationStrategyTest {
         ImpactPropagationStrategy bfs = new BreadthFirstImpactStrategy();
         ChangeRequest request = new ChangeRequest("Minor Latency", "payment", ChangeType.LATENCY_INCREASE, 10.0, ChangeUnit.PERCENT);
 
-        // Threshold set very high (e.g. 50.0): should only impact payment directly, checkout and gateway should be pruned
         ImpactPropagationStrategy.PropagationResult strictResult = bfs.propagate(
                 baselineModel.deepCopy(), baselineModel, request, 50.0);
 
@@ -166,7 +162,7 @@ class ImpactPropagationStrategyTest {
                 baselineModel.deepCopy(), baselineModel, loadRequest, 5.0);
 
         assertThat(result.directlyAffected()).containsExactly("gateway");
-        // Load surges flow downstream: gateway -> checkout -> payment & inventory
+
         assertThat(result.indirectlyAffected()).contains("checkout", "payment", "inventory");
     }
 }

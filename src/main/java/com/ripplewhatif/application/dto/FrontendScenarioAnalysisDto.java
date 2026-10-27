@@ -3,9 +3,6 @@ package com.ripplewhatif.application.dto;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Result payload matching Frontend ScenarioAnalysis TypeScript interface.
- */
 public record FrontendScenarioAnalysisDto(
         String id,
         String analyzedAt,

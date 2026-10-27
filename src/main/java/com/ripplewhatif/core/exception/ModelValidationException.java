@@ -3,9 +3,6 @@ package com.ripplewhatif.core.exception;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * Thrown when building or modifying a SystemModel violates architectural integrity constraints.
- */
 public class ModelValidationException extends RippleSimulationException {
 
     private final List<String> validationErrors;

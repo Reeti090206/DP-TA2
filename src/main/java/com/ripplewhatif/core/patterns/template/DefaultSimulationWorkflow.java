@@ -6,9 +6,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * Concrete implementation of {@link AbstractSimulationWorkflow} that tracks scenario history.
- */
 public class DefaultSimulationWorkflow extends AbstractSimulationWorkflow {
 
     private final List<SimulationResult> executedScenarios = new ArrayList<>();

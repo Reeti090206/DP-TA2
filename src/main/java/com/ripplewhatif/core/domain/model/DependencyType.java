@@ -1,8 +1,5 @@
 package com.ripplewhatif.core.domain.model;
 
-/**
- * Categorizes the communication mode between dependent components.
- */
 public enum DependencyType {
     SYNCHRONOUS_REST(1.0, true),
     SYNCHRONOUS_GRPC(0.9, true),

@@ -3,9 +3,6 @@ package com.ripplewhatif.core.domain.model;
 import com.ripplewhatif.core.patterns.builder.ComponentBuilder;
 import com.ripplewhatif.core.patterns.builder.SystemModelBuilder;
 
-/**
- * Factory creating the official Commerce Core architectural model matching the frontend schema.
- */
 public final class CommerceCoreSystemFactory {
 
     private CommerceCoreSystemFactory() {}
@@ -84,7 +81,7 @@ public final class CommerceCoreSystemFactory {
                         .availability(99.0)
                         .loadQps(300.0)
                         .build())
-                // Dependencies as defined in Commerce Core graph:
+
                 .addDependency("web-gateway", "authentication", DependencyStrength.STRONG, DependencyType.SYNCHRONOUS_REST)
                 .addDependency("web-gateway", "product-catalog", DependencyStrength.STRONG, DependencyType.SYNCHRONOUS_REST)
                 .addDependency("product-catalog", "cart", DependencyStrength.MEDIUM, DependencyType.SYNCHRONOUS_REST)

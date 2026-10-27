@@ -9,10 +9,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Immutable simulation report encapsulating change impact analysis,
- * affected components, risk score, and propagation traversal paths.
- */
 public class SimulationResult {
 
     public static final String DISCLAIMER =
@@ -25,7 +21,7 @@ public class SimulationResult {
     private final List<String> directlyAffected;
     private final List<String> indirectlyAffected;
     private final Map<String, ImpactRecord> impactRecords;
-    private final double overallRiskScore; // 0.0 to 100.0
+    private final double overallRiskScore;
     private final RiskLevel riskLevel;
     private final List<List<String>> impactPaths;
     private final boolean baselinePreserved;
@@ -123,9 +119,6 @@ public class SimulationResult {
         return DISCLAIMER;
     }
 
-    /**
-     * Produces a human-readable, formatted architectural impact summary.
-     */
     public String toFormattedSummary() {
         StringBuilder sb = new StringBuilder();
         sb.append("================================================================================\n");

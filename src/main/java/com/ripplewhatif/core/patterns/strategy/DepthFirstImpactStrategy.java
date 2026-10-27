@@ -15,19 +15,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * <b>Strategy Implementation:</b> Depth-First Search (DFS) based propagation strategy.
- *
- * <p>Explores deep architectural call paths end-to-end first, tracing cascading dependency
- * impacts along entire call stacks before exploring alternative branches.
- *
- * <p>Guarantees:
- * <ul>
- *   <li>Cycle-safe: Backtracking stack guards against recursive loops.</li>
- *   <li>Worst-case path recording: Computes impacts across full end-to-end cascades.</li>
- *   <li>Configurable threshold: Cuts off search branches once attenuation drops below threshold.</li>
- * </ul>
- */
 public class DepthFirstImpactStrategy implements ImpactPropagationStrategy {
 
     @Override
@@ -44,7 +31,6 @@ public class DepthFirstImpactStrategy implements ImpactPropagationStrategy {
         Component targetComponent = workingModel.getComponent(targetId);
         Component baselineTarget = baselineModel.getComponent(targetId);
 
-        // 1. Direct impact on target
         ComponentProperties directProjected = MetricProjector.projectDirectChange(targetComponent, request);
         double directImpactScore = MetricProjector.calculateDirectImpactScore(targetComponent, request);
         targetComponent.setProperties(directProjected);
@@ -70,7 +56,6 @@ public class DepthFirstImpactStrategy implements ImpactPropagationStrategy {
         );
         impactRecordMap.put(targetId, directRecord);
 
-        // 2. Recursive DFS
         boolean propagatesUpstream = request.getChangeType().propagatesUpstream();
         dfsTraverse(
                 workingModel,
@@ -119,7 +104,6 @@ public class DepthFirstImpactStrategy implements ImpactPropagationStrategy {
                     ? edge.getSourceComponentId()
                     : edge.getTargetComponentId();
 
-            // Cycle prevention
             if (currentPath.contains(nextId)) {
                 continue;
             }
@@ -131,7 +115,6 @@ public class DepthFirstImpactStrategy implements ImpactPropagationStrategy {
             double criticalityFactor = nextComp.getCriticality().getRiskMultiplier() / 1.5;
             double nextImpactScore = currentImpactScore * edgeWeight * criticalityFactor;
 
-            // Threshold cutoff
             if (nextImpactScore < threshold) {
                 continue;
             }
@@ -180,7 +163,6 @@ public class DepthFirstImpactStrategy implements ImpactPropagationStrategy {
                 }
             }
 
-            // Recurse deeper along this branch
             dfsTraverse(
                     workingModel,
                     baselineModel,

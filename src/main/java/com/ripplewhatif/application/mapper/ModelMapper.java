@@ -20,9 +20,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Maps between domain entities and application boundary DTOs.
- */
 public final class ModelMapper {
 
     private ModelMapper() {}

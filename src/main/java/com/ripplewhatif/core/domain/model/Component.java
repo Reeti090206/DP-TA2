@@ -2,14 +2,11 @@ package com.ripplewhatif.core.domain.model;
 
 import java.util.Objects;
 
-/**
- * Domain entity representing an architectural component (service, gateway, database, queue, etc.).
- */
 public class Component {
 
     private final String id;
     private final String name;
-    private final String type; // e.g. "GATEWAY", "SERVICE", "DATABASE", "QUEUE"
+    private final String type;
     private final ComponentCriticality criticality;
     private ComponentProperties properties;
 
@@ -58,9 +55,6 @@ public class Component {
         this.properties = properties;
     }
 
-    /**
-     * Creates a deep copy of this component with isolated properties.
-     */
     public Component deepCopy() {
         return new Component(this.id, this.name, this.type, this.criticality, this.properties.copy());
     }

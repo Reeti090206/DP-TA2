@@ -1,8 +1,5 @@
 package com.ripplewhatif.core.domain.change;
 
-/**
- * Types of architectural changes and failure modes supported by the simulator.
- */
 public enum ChangeType {
     LATENCY_INCREASE("Latency Degradation", true),
     AVAILABILITY_DECREASE("Availability Outage", true),
@@ -21,10 +18,6 @@ public enum ChangeType {
         return displayName;
     }
 
-    /**
-     * Faults (slowdown, outage, error rate) propagate upstream to calling components.
-     * Load surges propagate downstream to callees.
-     */
     public boolean propagatesUpstream() {
         return propagatesUpstream;
     }

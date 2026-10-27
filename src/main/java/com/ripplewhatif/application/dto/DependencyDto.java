@@ -3,9 +3,6 @@ package com.ripplewhatif.application.dto;
 import com.ripplewhatif.core.domain.model.DependencyStrength;
 import com.ripplewhatif.core.domain.model.DependencyType;
 
-/**
- * Data Transfer Object representing a dependency between two components.
- */
 public record DependencyDto(
         String sourceComponentId,
         String targetComponentId,

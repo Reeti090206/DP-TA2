@@ -13,12 +13,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-/**
- * Core domain aggregate representing the software system graph of components and dependencies.
- *
- * <p>Supports snapshot capture and restoration via the Memento Pattern to enable isolated
- * what-if simulation scenarios without corrupting baseline architectural state.
- */
 public class SystemModel {
 
     private final String systemId;
@@ -38,8 +32,6 @@ public class SystemModel {
     public String getSystemName() {
         return systemName;
     }
-
-    // --- Component Queries and Management ---
 
     public boolean hasComponent(String componentId) {
         if (componentId == null) return false;
@@ -81,14 +73,12 @@ public class SystemModel {
         String id = componentId.trim().toLowerCase();
         Component removed = components.remove(id);
         if (removed != null) {
-            // Remove associated dependencies
+
             dependencies.removeIf(d -> d.getSourceComponentId().equals(id) || d.getTargetComponentId().equals(id));
             return true;
         }
         return false;
     }
-
-    // --- Dependency Queries and Management ---
 
     public Set<Dependency> getAllDependencies() {
         return Collections.unmodifiableSet(dependencies);
@@ -112,11 +102,6 @@ public class SystemModel {
         return dependencies.removeIf(d -> d.getSourceComponentId().equals(s) && d.getTargetComponentId().equals(t));
     }
 
-    /**
-     * Returns all dependencies where targetComponentId == targetId.
-     * In our model, source depends on target (e.g. checkout -> payment).
-     * Hence, this returns the upstream callers who rely on targetId.
-     */
     public List<Dependency> getDirectCallersOf(String targetId) {
         String clean = targetId.trim().toLowerCase();
         return dependencies.stream()
@@ -124,10 +109,6 @@ public class SystemModel {
                 .collect(Collectors.toList());
     }
 
-    /**
-     * Returns all dependencies where sourceComponentId == sourceId.
-     * These are downstream callees that sourceId relies upon.
-     */
     public List<Dependency> getDirectCalleesOf(String sourceId) {
         String clean = sourceId.trim().toLowerCase();
         return dependencies.stream()
@@ -135,18 +116,10 @@ public class SystemModel {
                 .collect(Collectors.toList());
     }
 
-    // --- Memento Pattern Implementation ---
-
-    /**
-     * Originator method: Captures current state into an immutable memento snapshot.
-     */
     public SystemMemento createMemento(String snapshotId, String description) {
         return new SystemMemento(snapshotId, description, this.components, this.dependencies);
     }
 
-    /**
-     * Originator method: Restores state from a memento snapshot.
-     */
     public void restore(SystemMemento memento) {
         Objects.requireNonNull(memento, "Memento cannot be null for restoration");
         this.components.clear();
@@ -155,9 +128,6 @@ public class SystemModel {
         this.dependencies.addAll(memento.getDependenciesState());
     }
 
-    /**
-     * Creates an isolated deep copy of the system model for what-if scenario execution.
-     */
     public SystemModel deepCopy() {
         SystemModel clone = new SystemModel(this.systemId, this.systemName);
         for (Component comp : this.components.values()) {

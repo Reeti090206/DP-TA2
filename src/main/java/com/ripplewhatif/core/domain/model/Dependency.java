@@ -2,21 +2,10 @@ package com.ripplewhatif.core.domain.model;
 
 import java.util.Objects;
 
-/**
- * Directed relationship between two components.
- *
- * <p><b>SEMANTIC CONVENTION:</b>
- * In {@code Dependency(source, target)}, {@code source} depends upon {@code target}.
- * E.g., {@code Dependency("checkout", "payment")} means the Checkout Service calls and depends
- * on the Payment Service.
- *
- * <p>When {@code payment} experiences latency or availability degradation, the impact ripples
- * <i>upstream</i> to {@code checkout}.
- */
 public class Dependency {
 
-    private final String sourceComponentId; // The dependent caller (e.g. checkout)
-    private final String targetComponentId; // The provider callee (e.g. payment)
+    private final String sourceComponentId;
+    private final String targetComponentId;
     private final DependencyStrength strength;
     private final DependencyType type;
     private final boolean isSynchronous;
@@ -76,10 +65,6 @@ public class Dependency {
         return description;
     }
 
-    /**
-     * Calculates the attenuation factor of propagation across this edge.
-     * Combines coupling strength, dependency type, and synchronous nature.
-     */
     public double getEdgeTransmissionWeight() {
         double base = strength.getPropagationMultiplier() * type.getImpactFactor();
         return isSynchronous ? base : base * 0.5;

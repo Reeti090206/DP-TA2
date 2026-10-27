@@ -7,19 +7,12 @@ import com.ripplewhatif.core.domain.model.Component;
 import com.ripplewhatif.core.domain.model.ComponentProperties;
 import com.ripplewhatif.core.domain.model.Dependency;
 
-/**
- * Calculates metric projections and impact scores for directly altered and
- * indirectly affected components.
- */
 public final class MetricProjector {
 
     private MetricProjector() {
-        // Utility class
+
     }
 
-    /**
-     * Calculates direct projected properties for the target component.
-     */
     public static ComponentProperties projectDirectChange(Component target, ChangeRequest request) {
         ComponentProperties baseline = target.getProperties();
         ChangeType type = request.getChangeType();
@@ -54,9 +47,6 @@ public final class MetricProjector {
         };
     }
 
-    /**
-     * Calculates the baseline impact score (0.0 to 100.0) for the directly modified component.
-     */
     public static double calculateDirectImpactScore(Component target, ChangeRequest request) {
         double rawScore = switch (request.getChangeType()) {
             case LATENCY_INCREASE -> (request.getUnit() == ChangeUnit.PERCENT)
@@ -77,9 +67,6 @@ public final class MetricProjector {
         return Math.clamp(rawScore * (criticalityMultiplier / 1.5), 1.0, 100.0);
     }
 
-    /**
-     * Projects properties on an indirect dependent component based on upstream attenuation.
-     */
     public static ComponentProperties projectIndirectChange(Component dependent,
                                                             Dependency edge,
                                                             ComponentProperties causeProperties,

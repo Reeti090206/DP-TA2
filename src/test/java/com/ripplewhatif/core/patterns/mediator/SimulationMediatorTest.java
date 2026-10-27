@@ -59,7 +59,6 @@ class SimulationMediatorTest {
         assertThat(result.getOverallRiskScore()).isGreaterThan(0.0);
         assertThat(result.isBaselinePreserved()).isTrue();
 
-        // Verify baseline model remained untouched
         double currentPaymentLatency = model.getComponent("payment").getProperties().getLatencyMs();
         double currentCheckoutLatency = model.getComponent("checkout").getProperties().getLatencyMs();
 

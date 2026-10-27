@@ -4,9 +4,6 @@ import com.ripplewhatif.core.domain.model.Component;
 import com.ripplewhatif.core.domain.model.ComponentCriticality;
 import com.ripplewhatif.core.domain.model.ComponentProperties;
 
-/**
- * Fluent builder for {@link Component} entities.
- */
 public class ComponentBuilder {
 
     private final String id;

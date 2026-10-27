@@ -30,18 +30,15 @@ class MementoPatternTest {
     @Test
     @DisplayName("Should capture snapshot and verify snapshot immutability against live system modifications")
     void shouldEnsureSnapshotImmutability() {
-        // Save baseline snapshot
+
         SystemMemento memento = snapshotManager.saveBaseline(liveModel);
         double originalPaymentLatency = liveModel.getComponent("payment").getProperties().getLatencyMs();
 
-        // Mutate live system
         ComponentProperties modifiedProps = liveModel.getComponent("payment").getProperties().withLatencyMs(999.0);
         liveModel.updateComponentProperties("payment", modifiedProps);
 
-        // Verify live model reflects modification
         assertThat(liveModel.getComponent("payment").getProperties().getLatencyMs()).isEqualTo(999.0);
 
-        // Verify memento snapshot remains completely untouched (deep copied)
         Component snapshotPayment = memento.getComponentsState().get("payment");
         assertThat(snapshotPayment.getProperties().getLatencyMs()).isEqualTo(originalPaymentLatency);
     }
@@ -52,15 +49,12 @@ class MementoPatternTest {
         double originalPaymentLatency = liveModel.getComponent("payment").getProperties().getLatencyMs();
         snapshotManager.saveBaseline(liveModel);
 
-        // Mutate live system: modify payment and add new component
         liveModel.updateComponentProperties("payment", liveModel.getComponent("payment").getProperties().withLatencyMs(500.0));
         liveModel.addComponent(new Component("fraud-check", "Fraud Service"));
         assertThat(liveModel.getAllComponents()).hasSize(3);
 
-        // Restore baseline
         snapshotManager.restoreBaseline(liveModel);
 
-        // Check restored state
         assertThat(liveModel.getAllComponents()).hasSize(2);
         assertThat(liveModel.hasComponent("fraud-check")).isFalse();
         assertThat(liveModel.getComponent("payment").getProperties().getLatencyMs()).isEqualTo(originalPaymentLatency);
@@ -78,7 +72,6 @@ class MementoPatternTest {
         assertThat(snapshotManager.hasSnapshot("V2")).isTrue();
         assertThat(snapshotManager.getAvailableTags()).contains("V1", "V2");
 
-        // Roll back to V1
         snapshotManager.restoreSnapshot("V1", liveModel);
         assertThat(liveModel.hasComponent("audit-log")).isFalse();
     }

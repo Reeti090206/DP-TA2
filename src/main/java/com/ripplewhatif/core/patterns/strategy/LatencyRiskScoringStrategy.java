@@ -4,12 +4,6 @@ import com.ripplewhatif.core.domain.change.ChangeRequest;
 import com.ripplewhatif.core.domain.model.SystemModel;
 import com.ripplewhatif.core.domain.result.ImpactRecord;
 
-/**
- * <b>Strategy Implementation:</b> Latency-focused risk scoring strategy.
- *
- * <p>Measures aggregate percentage increase in operational latency across all affected components,
- * with heavy amplification when critical services suffer response delays.
- */
 public class LatencyRiskScoringStrategy implements RiskScoringStrategy {
 
     @Override
@@ -46,7 +40,7 @@ public class LatencyRiskScoringStrategy implements RiskScoringStrategy {
         }
 
         double weightedMeanIncrease = (totalWeight > 0) ? (totalPctLatencyIncrease / totalWeight) : 0.0;
-        // Scale to 0-100: A 100% latency increase corresponds to ~70 risk score
+
         double scaledRisk = (weightedMeanIncrease / 1.5);
         return Math.clamp(scaledRisk, 0.0, 100.0);
     }

@@ -2,9 +2,6 @@ package com.ripplewhatif.application.dto;
 
 import java.util.List;
 
-/**
- * Analyzed source change matching Frontend AnalyzedSourceChange TypeScript interface.
- */
 public record FrontendAnalyzedSourceChangeDto(
         String componentId,
         String componentName,
@@ -13,9 +10,9 @@ public record FrontendAnalyzedSourceChangeDto(
         double baselineValue,
         double proposedValue,
         String unit,
-        String direction,       // "increase" | "decrease"
+        String direction,
         double changePercent,
         double riskScore,
-        String riskDirection,   // "adverse" | "favorable"
+        String riskDirection,
         List<String> factors
 ) {}

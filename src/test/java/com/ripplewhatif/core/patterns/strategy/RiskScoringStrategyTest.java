@@ -37,14 +37,12 @@ class RiskScoringStrategyTest {
     void shouldBoundWeightedRiskScore() {
         RiskScoringStrategy strategy = new WeightedRiskScoringStrategy();
 
-        // Moderate change
         ChangeRequest modRequest = new ChangeRequest("Mod", "payment", ChangeType.LATENCY_INCREASE, 50.0, ChangeUnit.PERCENT);
         var propResult = propagationStrategy.propagate(systemModel.deepCopy(), systemModel, modRequest, 5.0);
         double score = strategy.calculateRiskScore(systemModel, modRequest, propResult);
 
         assertThat(score).isBetween(0.0, 100.0);
 
-        // Extreme change
         ChangeRequest extremeRequest = new ChangeRequest("Extreme", "payment", ChangeType.LATENCY_INCREASE, 10000.0, ChangeUnit.PERCENT);
         var extremeProp = propagationStrategy.propagate(systemModel.deepCopy(), systemModel, extremeRequest, 5.0);
         double extremeScore = strategy.calculateRiskScore(systemModel, extremeRequest, extremeProp);
@@ -93,7 +91,7 @@ class RiskScoringStrategyTest {
 
         assertThat(weightedScore).isBetween(0.0, 100.0);
         assertThat(latencyScore).isBetween(0.0, 100.0);
-        // Both strategy names should be distinguishable
+
         assertThat(weighted.getName()).isNotEqualTo(latency.getName());
     }
 }

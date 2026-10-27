@@ -21,22 +21,12 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-/**
- * Full End-to-End simulation scenario test verifying:
- *  1. Architecture creation with Builder pattern
- *  2. Change propagation through directed dependency graph
- *  3. Calculation of risk scores
- *  4. Preservation of baseline state (Scenario Isolation via Memento)
- */
 class EndToEndSimulationScenarioTest {
 
     @Test
     @DisplayName("End-to-End Simulation: Payment Service 50% slowdown propagation and baseline preservation")
     void testEndToEndPaymentSlowdownScenario() {
-        // Step 1: Build the enterprise system architecture
-        // Web Gateway -> Checkout Service -> Payment Service
-        // Checkout Service -> Inventory Service
-        // Payment Service -> Notification Service
+
         SystemModel system = new SystemModelBuilder()
                 .id("enterprise-ecommerce")
                 .name("Production Order Flow")
@@ -76,12 +66,10 @@ class EndToEndSimulationScenarioTest {
                 .addDependency("payment", "notification", DependencyStrength.WEAK, DependencyType.ASYNCHRONOUS_QUEUE)
                 .build();
 
-        // Capture initial properties to assert baseline preservation
         ComponentProperties initialPaymentProps = system.getComponent("payment").getProperties().copy();
         ComponentProperties initialCheckoutProps = system.getComponent("checkout").getProperties().copy();
         ComponentProperties initialGatewayProps = system.getComponent("web-gateway").getProperties().copy();
 
-        // Step 2: Formulate what-if change request
         ChangeRequest paymentSlowdown = new ChangeRequest(
                 "Payment Service 50% Slowdown",
                 "payment",
@@ -91,38 +79,28 @@ class EndToEndSimulationScenarioTest {
                 "Bank gateway throttling simulation"
         );
 
-        // Step 3: Run simulation through mediator
         DefaultSimulationMediator mediator = new DefaultSimulationMediator();
         SimulationResult result = mediator.simulate(system, paymentSlowdown);
 
-        // Step 4: Print the simulation report to stdout
         System.out.println(result.toFormattedSummary());
 
-        // Step 5: Verify simulation outcomes
-        // 5a. Direct impact
         assertThat(result.getDirectlyAffected()).containsExactly("payment");
 
-        // 5b. Indirect upstream impact: Checkout and Web Gateway
         assertThat(result.getIndirectlyAffected()).containsExactlyInAnyOrder("checkout", "web-gateway");
 
-        // 5c. Sibling and downstream services are unaffected by payment latency surge
         assertThat(result.getIndirectlyAffected()).doesNotContain("inventory", "notification");
 
-        // 5d. Verification of propagation path
         assertThat(result.getImpactPaths()).contains(List.of("payment", "checkout", "web-gateway"));
 
-        // 5e. Risk score is computed and within boundaries
         assertThat(result.getOverallRiskScore()).isBetween(0.0, 100.0);
         assertThat(result.getRiskLevel()).isNotEqualTo(RiskLevel.LOW);
 
-        // 5f. Verify isolated projected latencies
         double projectedPaymentLatency = result.getImpactRecords().get("payment").getProjectedProperties().getLatencyMs();
-        assertThat(projectedPaymentLatency).isEqualTo(180.0); // 120 + 50% of 120 = 180
+        assertThat(projectedPaymentLatency).isEqualTo(180.0);
 
         double projectedCheckoutLatency = result.getImpactRecords().get("checkout").getProjectedProperties().getLatencyMs();
         assertThat(projectedCheckoutLatency).isGreaterThan(initialCheckoutProps.getLatencyMs());
 
-        // Step 6: Verify baseline model remained untouched (Scenario Isolation / Memento pattern)
         assertThat(result.isBaselinePreserved()).isTrue();
         assertThat(system.getComponent("payment").getProperties()).isEqualTo(initialPaymentProps);
         assertThat(system.getComponent("checkout").getProperties()).isEqualTo(initialCheckoutProps);

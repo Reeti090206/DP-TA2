@@ -4,9 +4,6 @@ import com.ripplewhatif.core.domain.result.ImpactSeverity;
 
 import java.util.List;
 
-/**
- * DTO representing impact details on an affected component.
- */
 public record ImpactRecordDto(
         String componentId,
         boolean directlyAffected,

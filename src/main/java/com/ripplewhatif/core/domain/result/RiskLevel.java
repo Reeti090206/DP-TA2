@@ -1,8 +1,5 @@
 package com.ripplewhatif.core.domain.result;
 
-/**
- * Categorical risk tier based on normalized risk score (0.0 to 100.0).
- */
 public enum RiskLevel {
     LOW(0.0, 39.99),
     MEDIUM(40.0, 69.99),

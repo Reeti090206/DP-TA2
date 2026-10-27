@@ -4,9 +4,6 @@ import com.ripplewhatif.core.exception.InvalidChangeException;
 
 import java.util.Objects;
 
-/**
- * Value object capturing a hypothetical modification applied to a component during a what-if scenario.
- */
 public class ChangeRequest {
 
     private final String scenarioName;

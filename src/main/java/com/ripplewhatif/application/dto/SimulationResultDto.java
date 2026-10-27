@@ -6,9 +6,6 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Data Transfer Object representing the completed simulation report.
- */
 public record SimulationResultDto(
         String scenarioId,
         String scenarioName,

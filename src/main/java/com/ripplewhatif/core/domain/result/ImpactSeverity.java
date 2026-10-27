@@ -1,8 +1,5 @@
 package com.ripplewhatif.core.domain.result;
 
-/**
- * Granular classification of impact severity on an individual component.
- */
 public enum ImpactSeverity {
     NONE(0.0),
     NEGLIGIBLE(15.0),

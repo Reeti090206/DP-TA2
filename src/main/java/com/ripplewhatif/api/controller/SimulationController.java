@@ -22,11 +22,6 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 
-/**
- * <b>MVC Controller:</b> REST controller exposing change impact scenario simulation endpoints.
- *
- * <p>Strictly serves as the HTTP presentation adapter, delegating simulation to application services.
- */
 @RestController
 @RequestMapping("/api/v1/simulations")
 @CrossOrigin(originPatterns = "*")
@@ -57,10 +52,6 @@ public class SimulationController {
         ));
     }
 
-    /**
-     * Endpoint specifically tailored for the React frontend, receiving the frontend scenario
-     * and returning the exact ScenarioAnalysis TypeScript contract.
-     */
     @PostMapping("/analyze")
     public ResponseEntity<FrontendScenarioAnalysisDto> analyzeFrontendScenario(
             @RequestBody FrontendScenarioAnalysisRequestDto request) {

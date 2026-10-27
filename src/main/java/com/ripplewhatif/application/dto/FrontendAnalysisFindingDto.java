@@ -2,14 +2,11 @@ package com.ripplewhatif.application.dto;
 
 import java.util.List;
 
-/**
- * Finding item matching Frontend AnalysisFinding TypeScript interface.
- */
 public record FrontendAnalysisFindingDto(
         String componentId,
         String componentName,
-        String criticality,         // "critical" | "high" | "medium" | "low"
-        String impactType,          // "direct" | "indirect"
+        String criticality,
+        String impactType,
         int distance,
         int shortestDistance,
         List<String> causalPath,
@@ -17,7 +14,7 @@ public record FrontendAnalysisFindingDto(
         String sourceComponentName,
         double propagationSignal,
         double score,
-        String severity,            // "low" | "moderate" | "high" | "severe"
+        String severity,
         String rule,
         String explanation,
         List<String> factors

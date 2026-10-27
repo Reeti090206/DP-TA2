@@ -19,14 +19,6 @@ import com.ripplewhatif.core.patterns.strategy.DepthFirstImpactStrategy;
 import com.ripplewhatif.core.patterns.strategy.LatencyRiskScoringStrategy;
 import com.ripplewhatif.core.patterns.strategy.WeightedRiskScoringStrategy;
 
-/**
- * Standalone executable demonstration of RippleWhatIf core simulation engine.
- * Demonstrates:
- *  1. Builder Pattern for system assembly and validation.
- *  2. Memento Pattern for baseline snapshot and state isolation.
- *  3. Mediator Pattern for coordinating change impact workflows.
- *  4. Strategy Pattern for interchangeable BFS/DFS traversal and risk scoring.
- */
 public class RippleWhatIfDemo {
 
     public static void main(String[] args) {
@@ -34,7 +26,6 @@ public class RippleWhatIfDemo {
         System.out.println("     RIPPLEWHATIF: CHANGE IMPACT & SCENARIO SIMULATOR (CORE JAVA DEMO)");
         System.out.println("================================================================================\n");
 
-        // 1. BUILDER PATTERN: Assembling software architecture
         System.out.println("[Step 1] Constructing Architecture using Builder Pattern...");
         SystemModel system = new SystemModelBuilder()
                 .id("ecommerce-production")
@@ -69,7 +60,7 @@ public class RippleWhatIfDemo {
                         .latencyMs(45.0)
                         .availability(99.5)
                         .build())
-                // Dependencies: checkout depends on payment & inventory; gateway depends on checkout; payment depends on notification
+
                 .addDependency("checkout", "payment", DependencyStrength.STRONG, DependencyType.SYNCHRONOUS_REST)
                 .addDependency("checkout", "inventory", DependencyStrength.STRONG, DependencyType.SYNCHRONOUS_REST)
                 .addDependency("web-gateway", "checkout", DependencyStrength.CRITICAL, DependencyType.SYNCHRONOUS_REST)
@@ -83,13 +74,11 @@ public class RippleWhatIfDemo {
         System.out.printf("Baseline metrics: Payment latency = %.1fms | Checkout latency = %.1fms%n%n",
                 originalPaymentLatency, originalCheckoutLatency);
 
-        // 2. MEMENTO PATTERN: Capture Baseline Snapshot
         System.out.println("[Step 2] Capturing Baseline Memento Snapshot...");
         SystemSnapshotManager snapshotManager = new SystemSnapshotManager();
         snapshotManager.saveBaseline(system);
         System.out.println("Baseline snapshot stored in Caretaker.\n");
 
-        // 3. MEDIATOR PATTERN: Change Request & Simulation
         System.out.println("[Step 3] Submitting What-If Change Request through Simulation Mediator...");
         DefaultSimulationMediator mediator = new DefaultSimulationMediator();
 
@@ -102,18 +91,16 @@ public class RippleWhatIfDemo {
                 "Simulating external bank partner latency spike"
         );
 
-        // Execute Scenario 1: BFS + Weighted Risk
         SimulationContext bfsContext = new SimulationContext(
                 new BreadthFirstImpactStrategy(),
                 new WeightedRiskScoringStrategy(),
                 5.0,
-                false // Scenario isolation: do NOT commit change to baseline
+                false
         );
 
         SimulationResult resultBfs = mediator.simulate(system, paymentSlowdownRequest, bfsContext);
         System.out.println(resultBfs.toFormattedSummary());
 
-        // 4. STRATEGY PATTERN: Pluggable Strategy Substitution
         System.out.println("[Step 4] Strategy Substitution: Rerunning with DFS Traversal and Latency Scoring...");
         SimulationContext dfsContext = new SimulationContext(
                 new DepthFirstImpactStrategy(),
@@ -126,7 +113,6 @@ public class RippleWhatIfDemo {
         System.out.printf("DFS Strategy Result: Risk Score = %.2f [%s] (Strategy: %s)%n%n",
                 resultDfs.getOverallRiskScore(), resultDfs.getRiskLevel(), resultDfs.getStrategyName());
 
-        // 5. MEMENTO VERIFICATION: State Isolation & Immutability Check
         System.out.println("[Step 5] Verifying Scenario Isolation & Baseline Immutability...");
         double currentPaymentLatency = system.getComponent("payment").getProperties().getLatencyMs();
         double currentCheckoutLatency = system.getComponent("checkout").getProperties().getLatencyMs();

@@ -2,16 +2,12 @@ package com.ripplewhatif.core.domain.model;
 
 import java.util.Objects;
 
-/**
- * Immutable value object capturing quantitative operating metrics of a component:
- * latency (ms), availability (percentage 0.0 - 100.0), load (QPS), and failure probability (0.0 - 1.0).
- */
 public final class ComponentProperties {
 
     private final double latencyMs;
-    private final double availability;        // e.g., 99.9 (%)
-    private final double loadQps;             // queries per second
-    private final double failureProbability;  // 0.0 to 1.0
+    private final double availability;
+    private final double loadQps;
+    private final double failureProbability;
 
     public ComponentProperties(double latencyMs, double availability, double loadQps, double failureProbability) {
         if (latencyMs < 0) {

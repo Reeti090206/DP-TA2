@@ -10,27 +10,15 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
-/**
- * <b>Memento Pattern (Caretaker):</b> Manages historical snapshots and baseline state
- * for {@link SystemModel}.
- *
- * <p>Enables isolated scenario experimentation and instant rollback.
- */
 public class SystemSnapshotManager {
 
     public static final String BASELINE_TAG = "BASELINE";
     private final Map<String, SystemMemento> snapshotRegistry = new LinkedHashMap<>();
 
-    /**
-     * Saves the current model state under the default baseline tag.
-     */
     public SystemMemento saveBaseline(SystemModel model) {
         return saveSnapshot(BASELINE_TAG, model, "Default architectural baseline");
     }
 
-    /**
-     * Saves a snapshot under a custom tag.
-     */
     public SystemMemento saveSnapshot(String tag, SystemModel model, String description) {
         if (tag == null || tag.trim().isEmpty()) {
             throw new IllegalArgumentException("Snapshot tag cannot be null or empty");
@@ -58,18 +46,12 @@ public class SystemSnapshotManager {
         return snapshotRegistry.containsKey(tag.trim().toUpperCase());
     }
 
-    /**
-     * Restores the given model from a saved snapshot tag.
-     */
     public void restoreSnapshot(String tag, SystemModel model) {
         SystemMemento memento = getSnapshot(tag)
                 .orElseThrow(() -> new RippleSimulationException("Snapshot tag not found: " + tag));
         model.restore(memento);
     }
 
-    /**
-     * Restores the model to the baseline snapshot.
-     */
     public void restoreBaseline(SystemModel model) {
         restoreSnapshot(BASELINE_TAG, model);
     }
