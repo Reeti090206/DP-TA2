@@ -1,0 +1,227 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Aptos", "Segoe UI", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "Cascadia Code", "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+
+  --color-canvas: #f2f5f6;
+  --color-surface: #ffffff;
+  --color-ink: #21374a;
+  --color-ink-muted: #5f7281;
+  --color-ink-subtle: #84949f;
+  --color-line: #dde5e8;
+  --color-line-strong: #c9d5db;
+  --color-navy: #0b2236;
+  --color-navy-light: #173b56;
+  --color-brand: #0f766e;
+  --color-brand-strong: #0b5f59;
+  --color-brand-soft: #edf8f5;
+  --color-brand-line: #b9dfd8;
+  --color-brand-light: #5eead4;
+  --color-risk-critical: #b42318;
+  --color-risk-critical-soft: #fef3f2;
+  --color-risk-high: #b54708;
+  --color-risk-high-soft: #fffaeb;
+  --color-risk-medium: #175cd3;
+  --color-risk-medium-soft: #eff8ff;
+  --color-risk-low: #067647;
+  --color-risk-low-soft: #ecfdf3;
+  --color-cycle: #b45309;
+  --color-cycle-soft: #fffbeb;
+
+  --shadow-panel: 0 1px 2px rgba(11, 34, 54, 0.05), 0 10px 30px -24px rgba(11, 34, 54, 0.26);
+  --shadow-float: 0 16px 48px -20px rgba(11, 34, 54, 0.28);
+}
+
+@layer base {
+  *,
+  ::before,
+  ::after {
+    border-color: var(--color-line);
+  }
+
+  html {
+    color-scheme: light;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    margin: 0;
+    min-width: 320px;
+    min-height: 100vh;
+    background-color: var(--color-canvas);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  button,
+  [role="button"] {
+    cursor: pointer;
+  }
+
+  button:disabled {
+    cursor: not-allowed;
+  }
+
+  ::selection {
+    background: var(--color-brand-line);
+    color: var(--color-navy);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-brand);
+    outline-offset: 2px;
+  }
+}
+
+@layer utilities {
+  .scrollbar-subtle {
+    scrollbar-color: var(--color-line-strong) transparent;
+    scrollbar-width: thin;
+  }
+
+  .scrollbar-subtle::-webkit-scrollbar {
+    width: 7px;
+    height: 7px;
+  }
+
+  .scrollbar-subtle::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .scrollbar-subtle::-webkit-scrollbar-thumb {
+    border-radius: 999px;
+    background: var(--color-line-strong);
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+.ripple-flow .react-flow__pane {
+  cursor: grab;
+}
+
+.ripple-flow .react-flow__pane.dragging {
+  cursor: grabbing;
+}
+
+.ripple-flow .react-flow__node {
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  box-shadow: none;
+  font-family: inherit;
+}
+
+.ripple-flow .react-flow__node:focus-visible {
+  outline: 2px solid var(--color-brand);
+  outline-offset: 4px;
+}
+
+.ripple-flow .react-flow__handle {
+  width: 7px;
+  height: 7px;
+  border: 1.5px solid #ffffff;
+  background: #93a7b3;
+}
+
+.ripple-flow .react-flow__handle-left {
+  left: -4px;
+}
+
+.ripple-flow .react-flow__handle-right {
+  right: -4px;
+}
+
+.ripple-flow .react-flow__handle-bottom {
+  bottom: -4px;
+}
+
+.ripple-flow .react-flow__controls {
+  overflow: hidden;
+  border: 1px solid var(--color-line);
+  border-radius: 9px;
+  box-shadow: 0 4px 18px -8px rgba(11, 34, 54, 0.22);
+}
+
+.ripple-flow .react-flow__controls-button {
+  width: 28px;
+  height: 28px;
+  border-bottom: 1px solid var(--color-line);
+  background: #ffffff;
+  color: var(--color-ink-muted);
+}
+
+.ripple-flow .react-flow__controls-button:last-child {
+  border-bottom: 0;
+}
+
+.ripple-flow .react-flow__controls-button:hover {
+  background: var(--color-canvas);
+  color: var(--color-ink);
+}
+
+.ripple-flow .react-flow__controls-button svg {
+  max-width: 12px;
+  max-height: 12px;
+  fill: currentColor;
+}
+
+.ripple-flow .react-flow__edge-path {
+  transition: stroke 150ms ease, stroke-width 150ms ease, opacity 150ms ease;
+}
+
+.ripple-flow .react-flow__attribution {
+  display: none;
+}
+
+@keyframes modal-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.985);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.dialog-panel {
+  animation: modal-in 160ms ease-out;
+}
+
+.modal-backdrop {
+  animation: fade-in 140ms ease-out;
+}
+
+.notice-enter {
+  animation: modal-in 180ms ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
