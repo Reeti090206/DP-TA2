@@ -9,18 +9,20 @@ interface PageHeaderProps {
 
 export function PageHeader({ eyebrow, title, description, actions }: PageHeaderProps) {
   return (
-    <div className="mb-5 flex flex-col gap-3.5 sm:flex-row sm:items-end sm:justify-between">
+    <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
       <div className="min-w-0">
-        <div className="flex items-center gap-2 text-[9.5px] font-bold uppercase tracking-[0.17em] text-brand-strong">
-          <span aria-hidden="true" className="size-1.5 rounded-full bg-brand" />
+        <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider text-neutral-500">
+          <span aria-hidden="true" className="size-2 rounded-full bg-lime border border-lime-strong" />
           {eyebrow}
         </div>
-        <h1 className="mt-1.5 text-[26px] font-semibold tracking-[-0.035em] text-navy sm:text-[30px]">
+        <h2 className="mt-1.5 text-2xl sm:text-3xl font-bold tracking-tight text-[#141618] font-display">
           {title}
-        </h1>
-        <p className="mt-1 max-w-xl text-[12px] leading-[1.6] text-ink-muted">{description}</p>
+        </h2>
+        <p className="mt-1 max-w-2xl text-xs sm:text-[13px] leading-relaxed text-neutral-500">
+          {description}
+        </p>
       </div>
-      {actions ? <div className="flex flex-wrap items-center gap-2">{actions}</div> : null}
+      {actions ? <div className="flex flex-wrap items-center gap-2 shrink-0">{actions}</div> : null}
     </div>
   )
 }

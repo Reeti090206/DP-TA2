@@ -29,48 +29,48 @@ export function BaselineCard({ system, onInspectSystem }: BaselineCardProps) {
           className="pointer-events-none absolute -right-14 -top-16 size-44 rounded-full border-[18px] border-brand-soft/50"
         />
         <div className="relative">
-          <div className="flex items-start gap-3">
-            <span className="grid size-10 shrink-0 place-items-center rounded-lg border border-brand-line bg-brand-soft text-brand-strong">
-              <ShieldCheck aria-hidden="true" size={18} />
+          <div className="flex items-start gap-3.5">
+            <span className="grid size-11 shrink-0 place-items-center rounded-full border border-black/10 bg-[#181a1b] text-[#ebff70] shadow-xs">
+              <ShieldCheck aria-hidden="true" size={20} />
             </span>
             <div className="min-w-0 flex-1">
               <div className="flex flex-wrap items-center gap-2">
-                <h3 className="text-[15px] font-semibold tracking-[-0.015em] text-navy">
+                <h3 className="font-display text-base font-bold tracking-tight text-ink">
                   {system.name}
                 </h3>
-                <Badge tone="neutral">v{system.version}</Badge>
+                <Badge tone="lime">v{system.version}</Badge>
               </div>
-              <p className="mt-1 max-w-xl text-[10.5px] leading-[1.65] text-ink-muted">
+              <p className="mt-1 max-w-xl text-xs leading-relaxed text-ink-muted">
                 {system.description}
               </p>
             </div>
           </div>
 
-          <div className="mt-4 grid grid-cols-3 gap-2">
-            <div className="rounded-lg border border-line bg-canvas/45 px-2.5 py-2">
-              <div className="flex items-center gap-1 text-[8px] font-bold uppercase tracking-[0.09em] text-ink-subtle">
-                <Boxes aria-hidden="true" size={9} />
+          <div className="mt-4 grid grid-cols-3 gap-2.5">
+            <div className="rounded-[18px] border border-black/[0.06] bg-canvas/60 px-3.5 py-3">
+              <div className="flex items-center gap-1.5 text-[9px] font-bold uppercase tracking-wider text-neutral-400">
+                <Boxes aria-hidden="true" size={11} />
                 Components
               </div>
-              <div className="mt-1 font-mono text-[13px] font-semibold text-navy">
+              <div className="mt-1 font-display text-xl font-bold text-ink">
                 {system.components.length}
               </div>
             </div>
-            <div className="rounded-lg border border-line bg-canvas/45 px-2.5 py-2">
-              <div className="flex items-center gap-1 text-[8px] font-bold uppercase tracking-[0.09em] text-ink-subtle">
-                <GitBranch aria-hidden="true" size={9} />
+            <div className="rounded-[18px] border border-black/[0.06] bg-canvas/60 px-3.5 py-3">
+              <div className="flex items-center gap-1.5 text-[9px] font-bold uppercase tracking-wider text-neutral-400">
+                <GitBranch aria-hidden="true" size={11} />
                 Links
               </div>
-              <div className="mt-1 font-mono text-[13px] font-semibold text-navy">
+              <div className="mt-1 font-display text-xl font-bold text-ink">
                 {system.dependencies.length}
               </div>
             </div>
-            <div className="rounded-lg border border-cycle/20 bg-cycle-soft/65 px-2.5 py-2">
-              <div className="flex items-center gap-1 text-[8px] font-bold uppercase tracking-[0.09em] text-cycle">
-                <RefreshCw aria-hidden="true" size={9} />
+            <div className="rounded-[18px] border border-black/[0.06] bg-[#ebff70]/30 px-3.5 py-3">
+              <div className="flex items-center gap-1.5 text-[9px] font-bold uppercase tracking-wider text-ink">
+                <RefreshCw aria-hidden="true" size={11} />
                 Cycles
               </div>
-              <div className="mt-1 font-mono text-[13px] font-semibold text-cycle">1</div>
+              <div className="mt-1 font-display text-xl font-bold text-ink">1</div>
             </div>
           </div>
 

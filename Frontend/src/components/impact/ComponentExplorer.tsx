@@ -43,7 +43,7 @@ const CRITICALITY_OPTIONS: Array<{ value: CriticalityFilter; label: string }> = 
 ]
 
 const selectClass =
-  'h-8 w-full appearance-none rounded-md border border-line bg-white pl-2 pr-6 text-[10px] font-medium text-ink outline-none transition-colors hover:border-line-strong focus:border-brand'
+  'h-8.5 w-full appearance-none rounded-full border border-black/[0.08] bg-canvas/50 pl-3 pr-7 text-[11px] font-medium text-ink outline-none transition-all hover:border-black/20 focus:border-black focus:bg-white'
 
 export function ComponentExplorer({
   system,
@@ -115,7 +115,7 @@ export function ComponentExplorer({
             onChange={(event) => setSearch(event.target.value)}
             placeholder="Search components..."
             aria-label="Search components"
-            className="h-8 w-full rounded-md border border-line bg-canvas/50 pl-8 pr-7 text-[11px] text-ink outline-none transition-colors placeholder:text-ink-subtle hover:border-line-strong focus:border-brand focus:bg-white [&::-webkit-search-cancel-button]:hidden"
+            className="h-8.5 w-full rounded-full border border-black/[0.08] bg-canvas/50 pl-8 pr-7 text-[11px] text-ink outline-none transition-all placeholder:text-ink-subtle hover:border-black/20 focus:border-black focus:bg-white [&::-webkit-search-cancel-button]:hidden"
           />
           {search.length > 0 ? (
             <button
@@ -215,21 +215,21 @@ export function ComponentExplorer({
                   onClick={() => onSelect(component.id)}
                   aria-pressed={isSelected}
                   className={cn(
-                    'group flex w-full items-center gap-2.5 rounded-lg border px-2.5 py-2 text-left transition-colors',
+                    'group flex w-full items-center gap-2.5 rounded-[16px] border px-3 py-2 text-left transition-all duration-150',
                     isSelected
-                      ? 'border-brand-line bg-brand-soft/70'
-                      : 'border-transparent hover:border-line hover:bg-canvas/70',
+                      ? 'border-black/15 bg-white shadow-xs scale-[1.01]'
+                      : 'border-transparent hover:border-black/5 hover:bg-canvas/80',
                   )}
                 >
                   <span
                     className={cn(
-                      'grid size-7 shrink-0 place-items-center rounded-md border transition-colors',
+                      'grid size-8 shrink-0 place-items-center rounded-full border transition-all',
                       isSelected
-                        ? 'border-brand-line bg-white text-brand-strong'
-                        : 'border-line bg-white text-ink-muted group-hover:text-ink',
+                        ? 'border-black/10 bg-[#ebff70] text-black shadow-2xs'
+                        : 'border-black/5 bg-white text-ink-muted group-hover:text-ink',
                     )}
                   >
-                    <ComponentTypeIcon type={component.type} size={13} />
+                    <ComponentTypeIcon type={component.type} size={14} />
                   </span>
                   <span className="min-w-0 flex-1">
                     <span className="block truncate text-[11.5px] font-semibold text-ink">

@@ -78,17 +78,17 @@ export function NewScenarioDialog({
         aria-modal="true"
         aria-labelledby={titleId}
         aria-describedby={descriptionId}
-        className="dialog-panel relative w-full max-w-md overflow-hidden rounded-xl border border-line bg-white shadow-float"
+        className="dialog-panel relative w-full max-w-md overflow-hidden rounded-[28px] border border-black/10 bg-white shadow-2xl"
       >
-        <div className="flex items-start gap-3 border-b border-line px-5 py-4">
-          <span className="grid size-9 shrink-0 place-items-center rounded-lg border border-brand-line bg-brand-soft text-brand-strong">
-            <FlaskConical aria-hidden="true" size={17} />
+        <div className="flex items-start gap-3.5 border-b border-black/[0.06] px-6 py-5">
+          <span className="grid size-10 shrink-0 place-items-center rounded-2xl bg-canvas text-ink border border-black/5">
+            <FlaskConical aria-hidden="true" size={18} strokeWidth={2} />
           </span>
           <div className="min-w-0 flex-1">
-            <h2 id={titleId} className="text-[15px] font-semibold tracking-[-0.015em] text-navy">
+            <h2 id={titleId} className="text-base font-bold tracking-tight text-ink font-display">
               Create draft scenario
             </h2>
-            <p id={descriptionId} className="mt-0.5 text-[10.5px] leading-4 text-ink-muted">
+            <p id={descriptionId} className="mt-0.5 text-xs text-neutral-500">
               Start a what-if model without changing the read-only baseline.
             </p>
           </div>
@@ -96,9 +96,9 @@ export function NewScenarioDialog({
             type="button"
             onClick={onClose}
             aria-label="Close dialog"
-            className="grid size-7 shrink-0 place-items-center rounded-md text-ink-subtle transition-colors hover:bg-canvas hover:text-ink"
+            className="grid size-8 shrink-0 place-items-center rounded-full text-neutral-400 transition-colors hover:bg-neutral-100 hover:text-ink cursor-pointer"
           >
-            <X aria-hidden="true" size={15} />
+            <X aria-hidden="true" size={16} />
           </button>
         </div>
 
@@ -127,26 +127,26 @@ export function NewScenarioDialog({
                 aria-invalid={error ? true : undefined}
                 aria-describedby={error ? errorId : undefined}
                 placeholder="e.g. Inventory latency spike"
-                className="h-9 w-full rounded-lg border border-line-strong bg-white px-3 text-[12px] text-ink outline-none transition-colors placeholder:text-ink-subtle hover:border-ink-subtle/50 focus:border-brand focus:ring-2 focus:ring-brand/10"
+                className="h-10 w-full rounded-full border border-black/10 bg-canvas/40 px-4 text-xs text-ink outline-none transition-colors placeholder:text-neutral-400 hover:border-black/20 focus:border-black focus:bg-white focus:ring-2 focus:ring-black/5"
               />
               {error ? (
                 <div
                   id={errorId}
                   role="alert"
-                  className="mt-2 flex items-start gap-1.5 rounded-md border border-risk-critical/20 bg-risk-critical-soft px-2.5 py-1.5 text-[9.5px] leading-4 text-risk-critical"
+                  className="mt-2.5 flex items-start gap-2 rounded-2xl border border-rose-200 bg-rose-50 px-3 py-2 text-xs leading-4 text-rose-700"
                 >
-                  <TriangleAlert aria-hidden="true" size={11} className="mt-0.5 shrink-0" />
+                  <TriangleAlert aria-hidden="true" size={13} className="mt-0.5 shrink-0" />
                   {error}
                 </div>
               ) : (
-                <p className="mt-1.5 text-[9px] text-ink-subtle">
+                <p className="mt-1.5 text-[10px] text-neutral-400">
                   Use a short, distinct label you will recognize later.
                 </p>
               )}
             </div>
 
-            <div className="flex gap-2 rounded-lg border border-line bg-canvas/55 px-3 py-2.5 text-[9px] leading-4 text-ink-muted">
-              <GitBranch aria-hidden="true" size={12} className="mt-0.5 shrink-0 text-ink-subtle" />
+            <div className="flex gap-2.5 rounded-2xl border border-black/5 bg-canvas/40 p-3.5 text-xs leading-relaxed text-neutral-500">
+              <GitBranch aria-hidden="true" size={14} className="mt-0.5 shrink-0 text-neutral-400" />
               <p>
                 The draft starts at revision 1 with an independent change set. It will not
                 modify the baseline or other scenarios.
@@ -154,12 +154,12 @@ export function NewScenarioDialog({
             </div>
           </div>
 
-          <div className="flex items-center justify-end gap-2 border-t border-line bg-canvas/35 px-5 py-3">
+          <div className="flex items-center justify-end gap-2.5 border-t border-black/[0.06] bg-canvas/20 px-6 py-4">
             <Button variant="ghost" size="md" onClick={onClose}>
               Cancel
             </Button>
             <Button type="submit" size="md">
-              <Plus aria-hidden="true" size={12} />
+              <Plus aria-hidden="true" size={13} />
               Create scenario
             </Button>
           </div>

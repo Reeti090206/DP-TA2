@@ -17,7 +17,7 @@ import {
   type ComponentImpactState,
 } from './ComponentNode'
 import { CycleEdge } from './CycleEdge'
-import { Panel, PanelHeader } from '../ui/Panel'
+import { Panel } from '../ui/Panel'
 import { graphLayout } from '../../data/graphLayout'
 import { getCyclePathLabel } from '../../lib/systemGraph'
 import {
@@ -223,31 +223,55 @@ export function DependencyGraph({ className, ...props }: DependencyGraphProps) {
   const severityMeta = analysis ? ANALYSIS_SEVERITY_META[analysis.severity] : null
 
   return (
-    <Panel className={cn('flex min-h-[470px] flex-col overflow-hidden', className)}>
-      <PanelHeader
-        icon={Network}
-        title="Dependency map"
-        description={
-          analysis
-            ? 'The last analysis highlights causal routes and affected components. Select any node to inspect it.'
-            : 'A → B means a change in A can affect B. Select a node to trace its links.'
-        }
-        action={
-          analysis ? (
-            <div className="flex flex-wrap items-center justify-end gap-2 text-[9px] font-medium text-ink-subtle">
-              <span className="font-semibold text-ink">{analysis.affectedComponentIds.length} affected</span>
-              <span aria-hidden="true">·</span>
-              <span className={severityMeta?.textClass}>{severityMeta?.label}</span>
+    <Panel className={cn('flex min-h-[500px] flex-col overflow-hidden rounded-[28px] border border-black/[0.05] shadow-bento', className)}>
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-black/[0.05] px-6 py-4.5 bg-white">
+        <div className="flex items-center gap-3">
+          <span className="grid size-8 place-items-center rounded-full bg-canvas text-ink border border-black/5">
+            <Network size={16} strokeWidth={2} />
+          </span>
+          <div>
+            <div className="flex items-center gap-4">
+              <h2 className="font-display text-base font-bold text-[#141618]">
+                Statistics &amp; Architecture Map
+              </h2>
+              <div className="hidden sm:flex items-center gap-3.5 text-xs font-semibold text-neutral-500">
+                <span className="flex items-center gap-1.5">
+                  <span className="size-2 rounded-full bg-[#181a1b]" />
+                  Operations
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <span className="size-2 rounded-full bg-[#ebff70] border border-black/20" />
+                  Data transfer
+                </span>
+              </div>
+            </div>
+            <p className="mt-0.5 text-[11px] text-neutral-400">
+              {analysis
+                ? 'Active analysis highlights causal routes and affected components.'
+                : 'Interactive dependency graph · Select any node to trace propagation links.'}
+            </p>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-2">
+          {analysis ? (
+            <div className="flex items-center gap-2">
+              <span className="rounded-full bg-[#181a1b] px-3 py-1 text-xs font-bold text-white shadow-xs">
+                {analysis.affectedComponentIds.length} affected
+              </span>
+              <span className={cn('rounded-full px-3 py-1 text-xs font-bold shadow-xs', severityMeta?.backgroundClass, severityMeta?.textClass)}>
+                {severityMeta?.label}
+              </span>
             </div>
           ) : (
-            <div className="flex items-center gap-2 text-[9px] font-medium text-ink-subtle">
+            <div className="flex items-center gap-2 rounded-full border border-black/10 bg-canvas/50 px-3 py-1 text-xs font-semibold text-neutral-600">
               <span>{props.system.components.length} nodes</span>
-              <span aria-hidden="true">·</span>
+              <span className="text-neutral-300">·</span>
               <span>{props.system.dependencies.length} links</span>
             </div>
-          )
-        }
-      />
+          )}
+        </div>
+      </div>
       <div className="min-h-0 flex-1">
         <ReactFlowProvider>
           <GraphCanvas {...props} />

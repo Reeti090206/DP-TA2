@@ -91,13 +91,13 @@ export function ComponentDetailsPanel({
         }
       />
 
-      <div className="space-y-4 p-4">
+      <div className="space-y-4 p-5">
         <div className="flex items-start gap-3">
-          <span className="grid size-10 shrink-0 place-items-center rounded-lg border border-brand-line bg-brand-soft text-brand-strong">
-            <ComponentTypeIcon type={component.type} size={18} />
+          <span className="grid size-11 shrink-0 place-items-center rounded-full border border-black/10 bg-[#ebff70] text-[#141618] shadow-xs">
+            <ComponentTypeIcon type={component.type} size={20} />
           </span>
           <div className="min-w-0 flex-1">
-            <h3 className="text-[15px] font-semibold tracking-[-0.015em] text-navy">
+            <h3 className="font-display text-base font-bold tracking-tight text-ink">
               {component.name}
             </h3>
             <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
@@ -110,20 +110,20 @@ export function ComponentDetailsPanel({
           </div>
         </div>
 
-        <p className="text-[10.5px] leading-[1.65] text-ink-muted">{component.description}</p>
+        <p className="text-xs leading-relaxed text-ink-muted">{component.description}</p>
 
-        <dl className="grid grid-cols-2 gap-2">
-          <div className="rounded-lg border border-line bg-canvas/55 px-2.5 py-2">
-            <dt className="text-[8px] font-bold uppercase tracking-[0.11em] text-ink-subtle">
+        <dl className="grid grid-cols-2 gap-2.5">
+          <div className="rounded-[18px] border border-black/[0.06] bg-canvas/60 px-3.5 py-2.5">
+            <dt className="text-[9px] font-bold uppercase tracking-wider text-neutral-400">
               Owner
             </dt>
-            <dd className="mt-0.5 truncate text-[10.5px] font-semibold text-ink">{component.owner}</dd>
+            <dd className="mt-0.5 truncate text-xs font-semibold text-ink">{component.owner}</dd>
           </div>
-          <div className="rounded-lg border border-line bg-canvas/55 px-2.5 py-2">
-            <dt className="text-[8px] font-bold uppercase tracking-[0.11em] text-ink-subtle">
+          <div className="rounded-[18px] border border-black/[0.06] bg-canvas/60 px-3.5 py-2.5">
+            <dt className="text-[9px] font-bold uppercase tracking-wider text-neutral-400">
               Dependency links
             </dt>
-            <dd className="mt-0.5 text-[10.5px] font-semibold text-ink">
+            <dd className="mt-0.5 text-xs font-semibold text-ink">
               {incoming.length} in · {outgoing.length} out
             </dd>
           </div>
@@ -184,38 +184,38 @@ export function ComponentDetailsPanel({
         </div>
 
         <div>
-          <h4 className="text-[9px] font-bold uppercase tracking-[0.12em] text-ink-subtle">
+          <h4 className="text-[9px] font-bold uppercase tracking-wider text-neutral-400">
             Supported properties
           </h4>
-          <div className="mt-2 overflow-hidden rounded-lg border border-line">
+          <div className="mt-2 overflow-hidden rounded-[18px] border border-black/[0.06] bg-canvas/30">
             {component.supportedProperties.map((property, index) => (
               <div
                 key={property.key}
                 title={property.description}
                 className={cn(
-                  'flex items-center justify-between gap-3 px-2.5 py-2',
-                  index > 0 ? 'border-t border-line' : '',
+                  'flex items-center justify-between gap-3 px-3 py-2.5',
+                  index > 0 ? 'border-t border-black/[0.05]' : '',
                 )}
               >
                 <div className="min-w-0">
-                  <div className="truncate text-[10px] font-semibold text-ink">{property.label}</div>
-                  <div className="mt-0.5 font-mono text-[8px] text-ink-subtle">
+                  <div className="truncate text-xs font-semibold text-ink">{property.label}</div>
+                  <div className="mt-0.5 font-mono text-[9px] text-ink-subtle">
                     {property.key} · {property.min}–{property.max}
                   </div>
                 </div>
                 <div className="shrink-0 text-right">
-                  <div className="text-[10px] font-semibold text-navy">
+                  <div className="text-xs font-bold text-ink">
                     {formatPropertyValue(property.defaultValue, property.unit)}
                   </div>
-                  <div className="text-[8px] uppercase tracking-[0.08em] text-ink-subtle">baseline</div>
+                  <div className="text-[8px] uppercase tracking-wider text-ink-subtle">baseline</div>
                 </div>
               </div>
             ))}
           </div>
         </div>
 
-        <div className="flex gap-2 rounded-lg border border-line bg-canvas/55 px-2.5 py-2 text-[9px] leading-4 text-ink-muted">
-          <Info aria-hidden="true" size={12} className="mt-0.5 shrink-0 text-ink-subtle" />
+        <div className="flex gap-2 rounded-[16px] border border-black/[0.06] bg-canvas/60 px-3.5 py-2.5 text-[10px] leading-relaxed text-ink-muted">
+          <Info aria-hidden="true" size={13} className="mt-0.5 shrink-0 text-neutral-400" />
           <p>
             Edits are scoped to a scenario. The baseline component model stays read-only.
           </p>

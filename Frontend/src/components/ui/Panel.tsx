@@ -8,7 +8,7 @@ export function Panel({ className, children, ...props }: PanelProps) {
   return (
     <section
       className={cn(
-        'rounded-xl border border-line bg-surface shadow-panel',
+        'rounded-[28px] border border-black/[0.05] bg-surface shadow-bento overflow-hidden',
         className,
       )}
       {...props}
@@ -36,20 +36,20 @@ export function PanelHeader({
   return (
     <div
       className={cn(
-        'flex items-start justify-between gap-3 border-b border-line px-4 py-3',
+        'flex items-start justify-between gap-3 border-b border-line/70 px-5 py-4',
         className,
       )}
     >
-      <div className="flex min-w-0 items-start gap-2.5">
+      <div className="flex min-w-0 items-start gap-3">
         {Icon ? (
-          <span className="mt-0.5 grid size-6 shrink-0 place-items-center rounded-md border border-line bg-canvas text-ink-muted">
-            <Icon aria-hidden="true" size={13} strokeWidth={1.9} />
+          <span className="mt-0.5 grid size-7 shrink-0 place-items-center rounded-full border border-black/5 bg-canvas text-ink">
+            <Icon aria-hidden="true" size={13} strokeWidth={2} />
           </span>
         ) : null}
         <div className="min-w-0">
-          <h2 className="text-[13px] font-semibold tracking-[-0.005em] text-navy">{title}</h2>
+          <h2 className="text-[14px] font-semibold tracking-[-0.01em] text-ink font-display">{title}</h2>
           {description ? (
-            <p className="mt-0.5 text-[10.5px] leading-4 text-ink-muted">{description}</p>
+            <p className="mt-0.5 text-[11px] leading-4 text-ink-muted">{description}</p>
           ) : null}
         </div>
       </div>

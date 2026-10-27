@@ -10,6 +10,9 @@ import { AppSidebar } from './components/layout/AppSidebar'
 import { TopBar } from './components/layout/TopBar'
 import { PageLoading } from './components/layout/PageLoading'
 import { WorkspaceNotice } from './components/layout/WorkspaceNotice'
+import { ScenicBentoHeader } from './components/layout/ScenicBentoHeader'
+import { ScenicResourceRail } from './components/layout/ScenicResourceRail'
+import { NewScenarioDialog } from './components/scenario/NewScenarioDialog'
 import { usePageNavigation } from './hooks/usePageNavigation'
 import { demoSystem } from './data/demoSystem'
 import {
@@ -20,6 +23,8 @@ import {
 import {
   analyzeScenarioWithBackend,
   checkBackendHealth,
+  restoreBackendBaseline,
+  saveBackendBaseline,
 } from './lib/apiClient'
 import {
   clearScenarioChange,
@@ -77,6 +82,7 @@ export default function App() {
   const [activeScenarioId, setActiveScenarioId] = useState<string | null>(
     initialWorkspace.state.activeScenarioId,
   )
+  const [isNewScenarioOpen, setIsNewScenarioOpen] = useState(false)
   const [backendConnected, setBackendConnected] = useState(false)
   const [workspaceNoticeStore] = useState(() =>
     createWorkspaceNoticeStore(initialWorkspace.notice),
@@ -257,6 +263,10 @@ export default function App() {
 
     setSnapshots((current) => [...current, snapshot])
 
+    if (backendConnected) {
+      saveBackendBaseline().catch((err) => console.warn('Backend snapshot sync skipped:', err))
+    }
+
     return { ok: true, value: snapshot }
   }
 
@@ -284,6 +294,10 @@ export default function App() {
       ),
     )
     setActiveScenarioId(targetScenarioId)
+
+    if (backendConnected) {
+      restoreBackendBaseline().catch((err) => console.warn('Backend baseline restore skipped:', err))
+    }
 
     return { ok: true, value: updatedScenario }
   }
@@ -323,7 +337,7 @@ export default function App() {
     <div className="min-h-screen bg-canvas">
       <AppSidebar currentPage={page} onNavigate={navigate} />
 
-      <div className="min-h-screen lg:pl-[248px]">
+      <div className="min-h-screen lg:pl-[74px]">
         <TopBar
           currentPage={page}
           system={demoSystem}
@@ -332,7 +346,7 @@ export default function App() {
           onNavigate={navigate}
         />
 
-        <main className="mx-auto w-full max-w-[1600px] px-4 pb-10 pt-5 sm:px-6 lg:px-7 lg:pt-6">
+        <main className="mx-auto w-full max-w-[1640px] px-4 pb-12 pt-4 sm:px-6 lg:px-8">
           {workspaceNotice ? (
             <WorkspaceNotice
               notice={workspaceNotice}
@@ -340,34 +354,64 @@ export default function App() {
             />
           ) : null}
 
-          <Suspense fallback={<PageLoading />}>
-            {page === 'impact' ? (
-              <ImpactExplorerPage
-                system={demoSystem}
-                activeScenario={activeScenario}
-                onApplyChange={applyChange}
-                onResetChange={resetChange}
-                onUpdateAnalysisSettings={updateAnalysisSettings}
-                onRunAnalysis={runAnalysis}
-                onOpenScenarioLab={() => navigate('scenarios')}
-              />
-            ) : (
-              <ScenarioLabPage
-                system={demoSystem}
-                scenarios={scenarios}
-                snapshots={snapshots}
-                activeScenarioId={activeScenarioId}
-                onCreateScenario={createScenario}
-                onOpenScenario={openScenario}
-                onInspectSystem={() => navigate('impact')}
-                onSaveSnapshot={saveSnapshot}
-                onRestoreSnapshot={restoreSnapshot}
-                onBranchFromSnapshot={branchSnapshot}
-              />
-            )}
-          </Suspense>
+          <div className="space-y-7">
+            <ScenicBentoHeader
+              currentPage={page}
+              system={demoSystem}
+              activeScenario={activeScenario}
+              scenariosCount={scenarios.length}
+              snapshotsCount={snapshots.length}
+              backendConnected={backendConnected}
+              onNavigate={navigate}
+              onOpenCreateScenario={() => setIsNewScenarioOpen(true)}
+            />
+
+            <div className="flex flex-col xl:flex-row gap-6 items-start">
+              <div className="min-w-0 flex-1 w-full">
+                <Suspense fallback={<PageLoading />}>
+                  {page === 'impact' ? (
+                    <ImpactExplorerPage
+                      system={demoSystem}
+                      activeScenario={activeScenario}
+                      onApplyChange={applyChange}
+                      onResetChange={resetChange}
+                      onUpdateAnalysisSettings={updateAnalysisSettings}
+                      onRunAnalysis={runAnalysis}
+                      onOpenScenarioLab={() => navigate('scenarios')}
+                    />
+                  ) : (
+                    <ScenarioLabPage
+                      system={demoSystem}
+                      scenarios={scenarios}
+                      snapshots={snapshots}
+                      activeScenarioId={activeScenarioId}
+                      onCreateScenario={createScenario}
+                      onOpenScenario={openScenario}
+                      onInspectSystem={() => navigate('impact')}
+                      onSaveSnapshot={saveSnapshot}
+                      onRestoreSnapshot={restoreSnapshot}
+                      onBranchFromSnapshot={branchSnapshot}
+                    />
+                  )}
+                </Suspense>
+              </div>
+
+              <ScenicResourceRail />
+            </div>
+          </div>
         </main>
       </div>
+
+      {isNewScenarioOpen ? (
+        <NewScenarioDialog
+          existingNames={scenarios.map((s) => s.name)}
+          onClose={() => setIsNewScenarioOpen(false)}
+          onCreate={(name) => {
+            createScenario(name)
+            setIsNewScenarioOpen(false)
+          }}
+        />
+      ) : null}
     </div>
   )
 }

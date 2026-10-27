@@ -1,8 +1,8 @@
 import type { ButtonHTMLAttributes } from 'react'
 import { cn } from '../../lib/cn'
 
-type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger'
-type ButtonSize = 'sm' | 'md'
+type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger' | 'lime'
+type ButtonSize = 'sm' | 'md' | 'lg'
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: ButtonVariant
@@ -11,17 +11,20 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 const VARIANT_CLASSES: Record<ButtonVariant, string> = {
   primary:
-    'bg-brand text-white shadow-sm hover:bg-brand-strong focus-visible:ring-brand/25 disabled:hover:bg-brand',
+    'bg-[#181a1b] text-white shadow-xs hover:bg-black hover:scale-[1.01] active:scale-[0.98] focus-visible:ring-black/20 disabled:hover:bg-[#181a1b] disabled:hover:scale-100',
   secondary:
-    'border border-line-strong bg-white text-ink shadow-sm hover:border-brand-line hover:bg-brand-soft/50 focus-visible:ring-brand/20',
-  ghost: 'text-ink-muted hover:bg-canvas hover:text-ink focus-visible:ring-brand/20',
+    'border border-black/[0.08] bg-white text-ink shadow-xs hover:bg-neutral-50 hover:border-black/15 hover:scale-[1.01] active:scale-[0.98] focus-visible:ring-black/10',
+  ghost: 'text-ink-muted hover:bg-black/5 hover:text-ink active:scale-[0.98] focus-visible:ring-black/10',
   danger:
-    'bg-risk-critical text-white shadow-sm hover:bg-risk-critical/90 focus-visible:ring-risk-critical/25 disabled:hover:bg-risk-critical',
+    'bg-risk-critical text-white shadow-xs hover:bg-rose-700 hover:scale-[1.01] active:scale-[0.98] focus-visible:ring-rose-500/25 disabled:hover:bg-risk-critical',
+  lime:
+    'bg-lime text-lime-ink font-bold shadow-xs hover:bg-[#deee6e] hover:scale-[1.01] active:scale-[0.98] focus-visible:ring-lime-strong/30',
 }
 
 const SIZE_CLASSES: Record<ButtonSize, string> = {
-  sm: 'h-8 px-2.5 text-[11px]',
-  md: 'h-9 px-3.5 text-xs',
+  sm: 'h-8 px-3 text-[11.5px]',
+  md: 'h-9 px-4 text-xs',
+  lg: 'h-10 px-5 text-sm',
 }
 
 export function Button({
@@ -35,7 +38,7 @@ export function Button({
     <button
       type={type}
       className={cn(
-        'inline-flex shrink-0 items-center justify-center gap-1.5 rounded-lg font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-white disabled:opacity-45',
+        'inline-flex shrink-0 items-center justify-center gap-2 rounded-full font-semibold transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-white disabled:opacity-45 disabled:pointer-events-none cursor-pointer',
         VARIANT_CLASSES[variant],
         SIZE_CLASSES[size],
         className,

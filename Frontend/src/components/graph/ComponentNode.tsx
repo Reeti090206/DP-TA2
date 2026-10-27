@@ -32,32 +32,32 @@ export function ComponentNode({ data, selected }: NodeProps<ComponentFlowNode>) 
     <div
       title={`${component.name} · ${COMPONENT_TYPE_META[component.type].label} · ${criticality.label}${impactLabel ? ` · ${impactLabel}` : ''}`}
       className={cn(
-        'w-[170px] overflow-hidden rounded-[10px] border bg-white text-left shadow-[0_2px_8px_-3px_rgba(11,34,54,0.18)] transition-[border-color,box-shadow]',
+        'w-[176px] overflow-hidden rounded-[20px] border bg-white text-left shadow-bento transition-all duration-200 hover:scale-[1.02]',
         selected
-          ? 'border-brand shadow-[0_0_0_3px_rgba(15,118,110,0.13),0_8px_22px_-12px_rgba(11,34,54,0.4)]'
+          ? 'border-[#181a1b] ring-2 ring-[#181a1b]/15 shadow-md'
           : impact?.kind === 'source'
-            ? 'border-brand'
+            ? 'border-black ring-2 ring-[#ebff70]'
             : impactMeta
               ? impactMeta.borderClass
-              : 'border-line-strong hover:border-brand-line',
+              : 'border-black/[0.08] hover:border-black/25',
       )}
     >
-      <div aria-hidden="true" className={cn('h-[3px] w-full', criticality.barClass)} />
-      <div className="flex items-start gap-2.5 px-3 py-2.5">
+      <div aria-hidden="true" className={cn('h-[3.5px] w-full', criticality.barClass)} />
+      <div className="flex items-start gap-2.5 px-3.5 py-3">
         <span
           className={cn(
-            'mt-0.5 grid size-7 shrink-0 place-items-center rounded-md border',
+            'mt-0.5 grid size-7 shrink-0 place-items-center rounded-xl border',
             selected
-              ? 'border-brand-line bg-brand-soft text-brand-strong'
+              ? 'border-black/10 bg-[#181a1b] text-[#ebff70]'
               : impactMeta
                 ? `${impactMeta.borderClass} ${impactMeta.backgroundClass} ${impactMeta.textClass}`
-                : 'border-line bg-canvas text-ink-muted',
+                : 'border-black/5 bg-canvas text-ink',
           )}
         >
           <ComponentTypeIcon type={component.type} size={14} />
         </span>
         <span className="min-w-0 flex-1">
-          <span className="block truncate text-[13px] font-semibold leading-4 tracking-[-0.01em] text-navy">
+          <span className="block truncate text-[13px] font-bold leading-4 tracking-tight text-ink font-display">
             {component.name}
           </span>
           <span className="mt-0.5 block text-[8.5px] font-semibold uppercase tracking-[0.09em] text-ink-subtle">
@@ -71,27 +71,27 @@ export function ComponentNode({ data, selected }: NodeProps<ComponentFlowNode>) 
           />
         ) : null}
       </div>
-      <div className="flex items-center justify-between border-t border-line/70 bg-canvas/55 px-3 py-1.5">
-        <span className="inline-flex items-center gap-1.5 text-[8.5px] font-medium text-ink-muted">
+      <div className="flex items-center justify-between border-t border-black/[0.05] bg-canvas/40 px-3.5 py-1.5">
+        <span className="inline-flex items-center gap-1.5 text-[9px] font-semibold text-neutral-500">
           <span aria-hidden="true" className={cn('size-1.5 rounded-full', criticality.dotClass)} />
           {criticality.label}
         </span>
         {impact ? (
           <span
             className={cn(
-              'inline-flex items-center gap-1 rounded border px-1 py-px font-mono text-[7.5px] font-semibold',
+              'inline-flex items-center gap-1 rounded-full border px-2 py-0.5 font-mono text-[8px] font-semibold',
               impact.kind === 'source'
-                ? 'border-brand-line bg-brand-soft text-brand-strong'
+                ? 'border-lime-strong/30 bg-[#ebff70] text-[#141618]'
                 : impactMeta
                   ? `${impactMeta.borderClass} ${impactMeta.backgroundClass} ${impactMeta.textClass}`
-                  : 'border-line bg-canvas text-ink-muted',
+                  : 'border-black/5 bg-white text-ink-muted',
             )}
           >
             {impact.kind === 'source' ? 'Source' : impact.kind === 'direct' ? 'Direct' : 'Indirect'}
             {impact.score !== undefined ? ` ${impact.score}` : ''}
           </span>
         ) : (
-          <span className="font-mono text-[8.5px] text-ink-subtle">
+          <span className="font-mono text-[9px] font-medium text-neutral-400">
             {component.supportedProperties.length} props
           </span>
         )}
