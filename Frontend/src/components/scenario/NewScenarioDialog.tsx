@@ -127,7 +127,7 @@ export function NewScenarioDialog({
                 aria-invalid={error ? true : undefined}
                 aria-describedby={error ? errorId : undefined}
                 placeholder="e.g. Inventory latency spike"
-                className="h-10 w-full rounded-full border border-black/10 bg-canvas/40 px-4 text-xs text-ink outline-none transition-colors placeholder:text-neutral-400 hover:border-black/20 focus:border-black focus:bg-white focus:ring-2 focus:ring-black/5"
+                className="h-10 w-full rounded-lg border border-black/10 bg-canvas/40 px-3.5 text-xs text-ink outline-none transition-colors placeholder:text-neutral-400 hover:border-black/20 focus:border-black focus:bg-white focus:ring-2 focus:ring-black/5"
               />
               {error ? (
                 <div

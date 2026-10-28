@@ -6,7 +6,6 @@ import {
   useState,
   useSyncExternalStore,
 } from 'react'
-import { AppSidebar } from './components/layout/AppSidebar'
 import { TopBar } from './components/layout/TopBar'
 import { PageLoading } from './components/layout/PageLoading'
 import { WorkspaceNotice } from './components/layout/WorkspaceNotice'
@@ -331,16 +330,15 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-canvas">
-      <AppSidebar currentPage={page} onNavigate={navigate} />
+      <TopBar
+        currentPage={page}
+        system={demoSystem}
+        activeScenario={activeScenario}
+        backendConnected={backendConnected}
+        onNavigate={navigate}
+      />
 
-      <div className="min-h-screen lg:pl-[74px]">
-        <TopBar
-          currentPage={page}
-          system={demoSystem}
-          activeScenario={activeScenario}
-          backendConnected={backendConnected}
-          onNavigate={navigate}
-        />
+      <div className="min-h-screen">
 
         <main className="mx-auto w-full max-w-[1600px] px-4 pb-10 pt-5 sm:px-6 lg:px-8">
           {workspaceNotice ? (

@@ -256,17 +256,17 @@ export function DependencyGraph({ className, ...props }: DependencyGraphProps) {
         <div className="flex items-center gap-2">
           {analysis ? (
             <div className="flex items-center gap-2">
-              <span className="rounded-full bg-[#181a1b] px-3 py-1 text-xs font-bold text-white shadow-xs">
+              <span className="rounded-md bg-[#181a1b] px-2.5 py-1 text-xs font-semibold text-white shadow-xs">
                 {analysis.affectedComponentIds.length} affected
               </span>
-              <span className={cn('rounded-full px-3 py-1 text-xs font-bold shadow-xs', severityMeta?.backgroundClass, severityMeta?.textClass)}>
+              <span className={cn('rounded-md border px-2.5 py-1 text-xs font-semibold', severityMeta?.borderClass, severityMeta?.backgroundClass, severityMeta?.textClass)}>
                 {severityMeta?.label}
               </span>
             </div>
           ) : (
-            <div className="flex items-center gap-2 rounded-full border border-black/10 bg-canvas/50 px-3 py-1 text-xs font-semibold text-neutral-600">
+            <div className="flex items-center gap-1.5 rounded-md border border-black/10 bg-canvas/60 px-2.5 py-1 text-xs font-medium text-neutral-700">
               <span>{props.system.components.length} nodes</span>
-              <span className="text-neutral-300">·</span>
+              <span className="text-neutral-400">·</span>
               <span>{props.system.dependencies.length} links</span>
             </div>
           )}

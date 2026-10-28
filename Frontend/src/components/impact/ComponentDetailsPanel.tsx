@@ -93,7 +93,7 @@ export function ComponentDetailsPanel({
 
       <div className="space-y-4 p-5">
         <div className="flex items-start gap-3">
-          <span className="grid size-11 shrink-0 place-items-center rounded-full border border-black/10 bg-[#ebff70] text-[#141618] shadow-xs">
+          <span className="grid size-11 shrink-0 place-items-center rounded-xl border border-black/10 bg-[#ebff70] text-[#141618] shadow-xs">
             <ComponentTypeIcon type={component.type} size={20} />
           </span>
           <div className="min-w-0 flex-1">

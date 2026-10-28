@@ -30,7 +30,7 @@ export function BaselineCard({ system, onInspectSystem }: BaselineCardProps) {
         />
         <div className="relative">
           <div className="flex items-start gap-3.5">
-            <span className="grid size-11 shrink-0 place-items-center rounded-full border border-black/10 bg-[#181a1b] text-[#ebff70] shadow-xs">
+            <span className="grid size-11 shrink-0 place-items-center rounded-xl border border-black/10 bg-[#181a1b] text-[#ebff70] shadow-xs">
               <ShieldCheck aria-hidden="true" size={20} />
             </span>
             <div className="min-w-0 flex-1">

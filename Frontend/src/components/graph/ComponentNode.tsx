@@ -79,12 +79,12 @@ export function ComponentNode({ data, selected }: NodeProps<ComponentFlowNode>) 
         {impact ? (
           <span
             className={cn(
-              'inline-flex items-center gap-1 rounded-full border px-2 py-0.5 font-mono text-[8px] font-semibold',
+              'inline-flex items-center gap-1 rounded-[4px] border px-1.5 py-0.5 font-mono text-[8.5px] font-medium',
               impact.kind === 'source'
-                ? 'border-lime-strong/30 bg-[#ebff70] text-[#141618]'
+                ? 'border-lime-strong/50 bg-[#e7fb63] text-neutral-900'
                 : impactMeta
                   ? `${impactMeta.borderClass} ${impactMeta.backgroundClass} ${impactMeta.textClass}`
-                  : 'border-black/5 bg-white text-ink-muted',
+                  : 'border-black/10 bg-white text-ink-muted',
             )}
           >
             {impact.kind === 'source' ? 'Source' : impact.kind === 'direct' ? 'Direct' : 'Indirect'}

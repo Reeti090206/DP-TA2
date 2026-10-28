@@ -69,7 +69,7 @@ export function ScenarioList({
               >
                 <span
                   className={cn(
-                    'mt-0.5 grid size-9 shrink-0 place-items-center rounded-full border transition-all',
+                    'mt-0.5 grid size-9 shrink-0 place-items-center rounded-lg border transition-all',
                     isActive
                       ? 'border-black/10 bg-[#ebff70] text-black shadow-2xs'
                       : 'border-black/5 bg-white text-ink-muted group-hover:text-black',
@@ -114,7 +114,7 @@ export function ScenarioList({
           <button
             type="button"
             onClick={onCreateScenario}
-            className="flex w-full items-center justify-center gap-2 rounded-full border border-dashed border-black/15 py-3 text-xs font-semibold text-ink-muted transition-all hover:border-black hover:bg-white hover:text-black hover:scale-[1.01] cursor-pointer"
+            className="flex w-full items-center justify-center gap-2 rounded-xl border border-dashed border-black/15 py-3 text-xs font-semibold text-ink-muted transition-all hover:border-black hover:bg-white hover:text-black hover:scale-[1.01] cursor-pointer"
           >
             <Plus aria-hidden="true" size={13} strokeWidth={2.2} />
             New scenario

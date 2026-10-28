@@ -42,7 +42,7 @@ export function PanelHeader({
     >
       <div className="flex min-w-0 items-start gap-3">
         {Icon ? (
-          <span className="mt-0.5 grid size-7 shrink-0 place-items-center rounded-full border border-black/5 bg-canvas text-ink">
+          <span className="mt-0.5 grid size-7 shrink-0 place-items-center rounded-lg border border-black/5 bg-canvas text-ink">
             <Icon aria-hidden="true" size={13} strokeWidth={2} />
           </span>
         ) : null}

@@ -43,7 +43,7 @@ const CRITICALITY_OPTIONS: Array<{ value: CriticalityFilter; label: string }> = 
 ]
 
 const selectClass =
-  'h-8.5 w-full appearance-none rounded-full border border-black/[0.08] bg-canvas/50 pl-3 pr-7 text-[11px] font-medium text-ink outline-none transition-all hover:border-black/20 focus:border-black focus:bg-white'
+  'h-8.5 w-full appearance-none rounded-lg border border-black/[0.08] bg-canvas/50 pl-3 pr-7 text-[11px] font-medium text-ink outline-none transition-all hover:border-black/20 focus:border-black focus:bg-white'
 
 export function ComponentExplorer({
   system,
@@ -115,7 +115,7 @@ export function ComponentExplorer({
             onChange={(event) => setSearch(event.target.value)}
             placeholder="Search components..."
             aria-label="Search components"
-            className="h-8.5 w-full rounded-full border border-black/[0.08] bg-canvas/50 pl-8 pr-7 text-[11px] text-ink outline-none transition-all placeholder:text-ink-subtle hover:border-black/20 focus:border-black focus:bg-white [&::-webkit-search-cancel-button]:hidden"
+            className="h-8.5 w-full rounded-lg border border-black/[0.08] bg-canvas/50 pl-8 pr-7 text-[11px] text-ink outline-none transition-all placeholder:text-ink-subtle hover:border-black/20 focus:border-black focus:bg-white [&::-webkit-search-cancel-button]:hidden"
           />
           {search.length > 0 ? (
             <button
@@ -223,7 +223,7 @@ export function ComponentExplorer({
                 >
                   <span
                     className={cn(
-                      'grid size-8 shrink-0 place-items-center rounded-full border transition-all',
+                      'grid size-8 shrink-0 place-items-center rounded-lg border transition-all',
                       isSelected
                         ? 'border-black/10 bg-[#ebff70] text-black shadow-2xs'
                         : 'border-black/5 bg-white text-ink-muted group-hover:text-ink',
