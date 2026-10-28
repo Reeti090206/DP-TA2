@@ -104,7 +104,7 @@ src/
   types/           Domain and navigation types
   App.tsx          Workspace state ownership and page wiring
   main.tsx         React entry point
-```
+``` 
 
 ## Modeling notes
 
